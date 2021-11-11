@@ -1,0 +1,28 @@
+Package: highlandr
+Title: Random Useful Functions
+Version: 0.0.0.1
+Authors@R: 
+    person(given = "Colin",
+           family = "Macleod",
+           role = c("aut", "cre"),
+           email = "colinmacleod1@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: This is a collection of random functions that I have created for various projects. 
+    As such they come in themes related to formatting, glms, sentiment analysis,
+    cluster analysis, data validation, image processing and others
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+Imports:
+          plyr,
+          DescTools,
+          rlist,
+          stats,
+          openxlsx,
+          lattice,
+          tidyverse,
+          data.table,
+          stringr,
+          tibble,
+          chron
+RoxygenNote: 7.1.2
