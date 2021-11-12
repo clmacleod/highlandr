@@ -353,7 +353,7 @@ fp<-function(freq,perc){
   if(length(freq)!=length(perc)){warning("agruments must be the same length")}
   l<-length(freq)
   bs<-data.frame("freq"=freq,"perc"=perc,"l"=rep(" (",l),"r"=rep(")",l))
-  ret<-unite(bs,"fp",c("freq","l","perc","r"),sep = "")
+  ret<-tidyr::unite(bs,"fp",c("freq","l","perc","r"),sep = "")
   return(ret$fp)
 }
 
