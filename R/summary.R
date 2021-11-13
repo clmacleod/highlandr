@@ -824,7 +824,7 @@ fp_msd_class<-function(indvar,classvar,fp=TRUE,funct1='mean',funct2='sd'){
 #' @param fp boolean indicating if the requested result should be frequency(percent). Default is TRUE
 #' @param funct1 the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"
 #' @param funct2 the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"
-#' @param functasvar boolean which adds function to the vairable name. default is FALSE
+#' @param shownval boolean indicating if the n value used after na removal should be displayed in non fp cases. default is TRUE
 #' @param total boolean indicating if a 'total' column should be added to the data frame. default is TRUE
 #' @param rnd_digs the number of digits to round results to. default is 2
 #' @param rownvar name of the first column which contains either indvar categories or function names. default is 'Class'
@@ -835,7 +835,8 @@ fp_msd_class<-function(indvar,classvar,fp=TRUE,funct1='mean',funct2='sd'){
 #' @examples
 #' fp_msd_class2_function()
 #'
-fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',functasvar=FALSE,total=TRUE,rnd_digs=2,rownvar='Class',count_miss="ifmiss",count_miss_lab="Missing"){
+fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',shownval=TRUE,total=TRUE,rnd_digs=2,rownvar='Class',count_miss="ifmiss",count_miss_lab="Missing"){
+  print(names(indvar))
   ind<-0
   if(is.null(classvar)){
     classvar<-rep("temp",length(indvar))
@@ -881,7 +882,11 @@ fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',f
       init_table <- init_table[,c(col_idx, (1:length(init_table))[-col_idx])]
     }
     init_table<-as.data.frame(init_table)
-    row.names(init_table)<-paste(funct1,"(",funct2,")",sep = "")
+    if(shownval==TRUE){
+      row.names(init_table)<-paste(highlandr::nequals(length(indvar)-highlandr::sumisna(indvar))," ",funct1,"(",funct2,")",sep = "")
+    } else{
+      row.names(init_table)<-paste(funct1,"(",funct2,")",sep = "")
+    }
   }
   if(nanum>0){print(paste(nanum,"cases were removed due to NA values"))}
   if(rownvar!='none'){init_table<-rown_to_var(init_table,varname = rownvar)}
