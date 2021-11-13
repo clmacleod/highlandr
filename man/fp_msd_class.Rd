@@ -24,8 +24,8 @@ base function for the fp_msd_class suite, recommend using fp_msd_class2. given a
 fp_msd_class_function()
 
 }
-\keyword{collinear}
-\keyword{correlation}
+\keyword{cross}
+\keyword{crosstab}
 \keyword{fp_msd_class}
-\keyword{multicollinear}
+\keyword{summary}
 \keyword{variables}
