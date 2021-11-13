@@ -915,7 +915,7 @@ fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',s
 #' @keywords fp_msd_class2_msdmulti variables correlation multicollinear collinear
 #' @export
 #' @examples
-#' fp_msd_class2_function()
+#' fp_msd_class2_msdmulti_function()
 #'
 fp_msd_class2_msdmulti<-function(x,vars,varnames=c("Variables","Function(s)"),classvar=NULL,funct1='mean',funct2='sd',shownval=TRUE,total=TRUE,rnd_digs=2){
   xapply<-lapply(x[,vars],highlandr::fp_msd_class2,fp=FALSE,shownval=TRUE,funct1=funct1,funct2=funct2,classvar=classvar,total=total,rnd_digs=rnd_digs)
