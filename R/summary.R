@@ -786,7 +786,7 @@ varcompare<-function(d,vars,vartypes){
 #' @param fp boolean indicating if the requested result should be frequency(percent). Default is TRUE
 #' @param funct1 the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'
 #' @param funct2 the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'
-#' @keywords fp_msd_class variables correlation multicollinear collinear
+#' @keywords fp_msd_class variables crosstab cross summary
 #' @export
 #' @examples
 #' fp_msd_class_function()
@@ -830,7 +830,7 @@ fp_msd_class<-function(indvar,classvar,fp=TRUE,funct1='mean',funct2='sd'){
 #' @param rownvar name of the first column which contains either indvar categories or function names. default is 'Class'
 #' @param count_miss switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'
 #' @param count_miss_lab if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'
-#' @keywords fp_msd_class2 variables correlation multicollinear collinear
+#' @keywords fp_msd_class2 variables crosstab cross summary
 #' @export
 #' @examples
 #' fp_msd_class2_function()
@@ -897,6 +897,41 @@ fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',s
 
 
 
+#' fp_msd_class2_msdmulti function
+#'
+#' This function is a wrapper for fp_msd_class2 when there are multiple variables to analyze using functions outside of fp. Given a data frame and a vector of variable names this function will apply fp_msd_class2 to each one and rbind the results into a dataframe
+#' @param x dataframe containing the data to be summarized
+#' @param vars vector of variable names for the varaibles that are to be summarized. all variables must be numeric and present in the data frame
+#' @param varnames vector of names to switch the first and second columns of the dataframe to. default is "Variables" and "Function(s)" respectively
+#' @param classvar optional class variable to cross with the independent variables. this is is typically presented as a slice (e.g. data$variable)
+#' @param funct1 the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"
+#' @param funct2 the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"
+#' @param shownval boolean indicating if the n value used after na removal should be displayed in non fp cases. default is TRUE
+#' @param total boolean indicating if a 'total' column should be added to the data frame. default is TRUE
+#' @param rnd_digs the number of digits to round results to. default is 2
+#' @param rownvar name of the first column which contains either indvar categories or function names. default is 'Class'
+#' @param count_miss switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'
+#' @param count_miss_lab if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'
+#' @keywords fp_msd_class2_msdmulti variables correlation multicollinear collinear
+#' @export
+#' @examples
+#' fp_msd_class2_function()
+#'
+fp_msd_class2_msdmulti<-function(x,vars,varnames=c("Variables","Function(s)"),classvar=NULL,funct1='mean',funct2='sd',shownval=TRUE,total=TRUE,rnd_digs=2){
+  xapply<-lapply(x[,vars],highlandr::fp_msd_class2,fp=FALSE,shownval=TRUE,funct1=funct1,funct2=funct2,classvar=classvar,total=total,rnd_digs=rnd_digs)
+  databind<-rown_to_var(do.call(rbind,xapply))
+  oldnames<-names(databind)
+  newnames<-c(varnames,names(databind)[!names(databind) %in% c("terms","Class")])
+  databind<-highlandr::rename.variables(databind,newname = c(varnames,names(databind)[!names(databind) %in% c("terms","Class")]))
+  if(sum(grepl("=",databind[,2]))>0&is.null(classvar)){
+    databind<-tidyr::separate(databind,2,into=c("N","Function(s)")," ")
+  }
+  return(databind)
+}
+
+
+
+
 
 
 
@@ -954,3 +989,8 @@ sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction
   return(sigtable)
 
 }
+
+
+
+
+
