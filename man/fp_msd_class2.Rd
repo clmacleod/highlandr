@@ -10,7 +10,7 @@ fp_msd_class2(
   fp = TRUE,
   funct1 = "mean",
   funct2 = "sd",
-  functasvar = FALSE,
+  shownval = TRUE,
   total = TRUE,
   rnd_digs = 2,
   rownvar = "Class",
@@ -29,7 +29,7 @@ fp_msd_class2(
 
 \item{funct2}{the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"}
 
-\item{functasvar}{boolean which adds function to the vairable name. default is FALSE}
+\item{shownval}{boolean indicating if the n value used after na removal should be displayed in non fp cases. default is TRUE}
 
 \item{total}{boolean indicating if a 'total' column should be added to the data frame. default is TRUE}
 
