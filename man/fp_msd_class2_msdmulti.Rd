@@ -45,7 +45,7 @@ fp_msd_class2_msdmulti(
 This function is a wrapper for fp_msd_class2 when there are multiple variables to analyze using functions outside of fp. Given a data frame and a vector of variable names this function will apply fp_msd_class2 to each one and rbind the results into a dataframe
 }
 \examples{
-fp_msd_class2_function()
+fp_msd_class2_msdmulti_function()
 
 }
 \keyword{collinear}
