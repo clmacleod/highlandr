@@ -836,7 +836,6 @@ fp_msd_class<-function(indvar,classvar,fp=TRUE,funct1='mean',funct2='sd'){
 #' fp_msd_class2_function()
 #'
 fp_msd_class2<-function(indvar,classvar=NULL,fp=TRUE,funct1='mean',funct2='sd',shownval=TRUE,total=TRUE,rnd_digs=2,rownvar='Class',count_miss="ifmiss",count_miss_lab="Missing"){
-  print(names(indvar))
   ind<-0
   if(is.null(classvar)){
     classvar<-rep("temp",length(indvar))
