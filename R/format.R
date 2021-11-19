@@ -353,7 +353,7 @@ fp<-function(freq,perc){
   if(length(freq)!=length(perc)){warning("agruments must be the same length")}
   l<-length(freq)
   bs<-data.frame("freq"=freq,"perc"=perc,"l"=rep(" (",l),"r"=rep(")",l))
-  ret<-tidyr::unite(bs,"fp",c("freq","l","perc","r"),sep = "")
+  ret<-unite(bs,"fp",c("freq","l","perc","r"),sep = "")
   return(ret$fp)
 }
 
@@ -404,7 +404,80 @@ pval_star<- function(pvals,starmat,vec_return=FALSE,correction='none',digs='none
 
 
 
+#' create_studyid function
+#'
+#' given a seed this function creates a pseudo random ID that should be unique to a patient. the seed also must be unique to the patient but preferably not a single identifier. for example it would be better to use ssn multiplied by dob and gender rather than ssn alone. additionally row numbers can be used if they are unlikely to yield patient information
+#' @param x a seed unique to a patient used for generating the pseudorandom id.
+#' @keywords create_studyid studyid study id deidentify de-identify
+#' @export
+#' @examples
+#' create_studyid_function()
+#'
+create_studyid<-function(x,sha=FALSE){
+  if(is.na(x)){
+    ret<-NA
+  } else if (sha==TRUE){
+    ret<-as.vector(openssl::sha256(as.character(x)))
+  } else {
+    set.seed(x)
+    ret<-ids::random_id(1,use_openssl=FALSE)
+  }
+  return(ret)
+}
 
 
+
+#' list_to_vecs function
+#'
+#' takes a list of lists and converts the list elements to vectors
+#' @param x list of lists which you would like to convert to a list of vectors
+#' @keywords list_to_vecs list vector convert
+#' @export
+#' @examples
+#' list_to_vecs_function()
+#'
+list_to_vecs<-function(x){
+  if(is.null(x)){
+    x<-NA
+  } else {
+    x<-toString(x)
+  }
+  return(x)
+}
+
+
+
+#' n2n function
+#'
+#' base function used to create list_to_vecs, recommend using that instead. This function takes a list comprised only of lists and converts the list elements to vectors. list_to_vecs takes any list/dataframe and converts any elements that are lists to vectors. This is useful when using functions like pivot_wider which can often return lists of lists.
+#' @param x list of lists which you would like to convert to a list of vectors. this must be all lists, if a list element is instead a vector this function will cause errors.
+#' @keywords n2n list vector convert list_to_vecs pivot_wider
+#' @export
+#' @examples
+#' n2n_function()
+#'
+n2n<-function(x){
+  if(is.null(x)){
+    x<-NA
+  } else {
+    x<-toString(x)
+  }
+  return(x)
+}
+
+
+#' list_to_vecs function
+#'
+#' wrapper for n2n this function takes a list or dataframe that may contain lists and converts the list elements to vectors. This is useful when using functions like pivot_wider which can often return lists of lists.
+#' @param x list of lists which you would like to convert to a list of vectors
+#' @keywords list_to_vecs list vector convert n2n pivot_wider
+#' @export
+#' @examples
+#' list_to_vecs_function()
+#'
+list_to_vecs<-function(x){
+  x[,unlist(lapply(x,is.list))]<-lapply(x[,unlist(lapply(x,is.list))],sapply,n2n)
+  return(x)
+}
 
 
