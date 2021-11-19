@@ -134,9 +134,18 @@ collapse_list<-function(lst,delimeter=", "){
 
 rename.variables<-function(data,newname,oldname=NULL){
   if(is.null(oldname)){oldname<-names(data)}
-  names(data)[names(data) == oldname] <- newname
-  return(data)
+  if(length(newname)!=length(oldname)){
+    warning("newname and oldname must be the same length")
+  } else if(sum(names(data) %in% oldname)!=length(oldname)){
+    warning("one or more of the oldnames supplied does not match a variable in data. please check the vector of oldnames given for errors")
+  } else{
+    for(i in 1:length(newname)){
+      names(data)[names(data) == oldname[i]] <- newname[i]
+    }
+    return(data)
+  }
 }
+
 
 
 #' is checked function
