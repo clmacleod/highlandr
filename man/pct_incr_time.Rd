@@ -11,7 +11,7 @@ pct_incr_time(init, yr, inc)
 
 \item{yr}{the number of years or iterations to run through}
 
-\item{inc}{the percent increase or decrease formatted as a number with 1 returning the same value, less than 1 reducing the value, greated than one increasin the value.}
+\item{inc}{the percent increase or decrease formatted as a number with 1 returning the same value, less than 1 reducing the value, greater than one increasing the value.}
 }
 \description{
 given one proportion and the effect size this function calculated the other proportion (i.e. so instead of having two proportions and calculating the effect size between the two)
