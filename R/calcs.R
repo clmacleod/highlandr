@@ -188,3 +188,22 @@ h.oneprop<-function(prop1,h){
   otherprop<-sin((asin(sqrt(prop1))+abs(h/2)))^2
   return(otherprop)
 }
+
+
+#' pct_incr_time function
+#'
+#' given one proportion and the effect size this function calculated the other proportion (i.e. so instead of having two proportions and calculating the effect size between the two)
+#' @param init the initial or starting value
+#' @param yr the number of years or iterations to run through
+#' @param inc the percent increase or decrease formatted as a number with 1 returning the same value, less than 1 reducing the value, greated than one increasin the value.
+#' @keywords pct_incr_time percent increase over time compound
+#' @export
+#' @examples
+#' pct_incr_time_function()
+#'
+pct_incr_time<-function(init,yr,inc){
+  for(i in 1:yr){
+    init<-init*inc
+  }
+  return(init)
+}

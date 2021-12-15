@@ -490,3 +490,54 @@ list_to_vecs<-function(x){
 }
 
 
+
+#' either_both function
+#'
+#' Takes two variables (or two vectors of variables) and returns a vector representing the 'or' or the 'and' of the combination of two variables and adds a custom suffix
+#' @param x quoted variable names (e.g. "var1") or vector of quoted variable names in the dataset to be compared to y
+#' @param y quoted variable names (e.g. "var1") or vector of quoted variable names in the dataset to be compared to x. If x and y are vectors of variable names they must be the same length
+#' @param data the dataset that contains the variables in x and y
+#' @param either boolean determining if the function should operate by 'or' or 'and'. default is TRUE indicating that the function returns the positive value if either input variable is 'positive'. FALSE returns positive if both input variables are positive
+#' @param pos the value that indicates 'positive', 'affirmative', or 'yes'. default is '1' to be used wit binary 0/1 variables
+#' @param neg the value that indicates 'negative', or 'no'. default is '0' to be used wit binary 0/1 variables
+#' @param addtn suffix to add to the variable names. default is '_comb' indicating 'combined'. if 'usexnames'==FALSE then addtn will be the base variable name and the iteration number will be added to it (e.g. if addtn is 'combined' then we would get combined1, combined2, etc.)
+#' @param usexnames boolean determining if the x variables should be used as the base variable names for the new combined variables. default is TRUE. if FALSE addtn is used as the base and then iterated if needed
+#' @param rmv text to remove from variable names if usexnames is TRUE. for example if all variable names contained '_pre_' and we wanted that removed we could put it in this argument. default is 'none' indicating no text is to be removed
+#' @keywords either_both either both combine and or
+#' @export
+#' @examples
+#' either_function()
+#'
+either_both<-function(x,y,data,either=TRUE,pos=1,neg=0,addtn="_comb",usexnames=TRUE,rmv='none'){
+  if(length(x)!=length(y)){"x and y must be the same length"}
+  ret<-data.frame(rep(NA,nrow(data)))
+  for(i in 1:length(x)){
+    if(either){
+      if(usexnames==TRUE){
+        vname<-paste(x[i],addtn,sep = "")
+        if(rmv!='none'){
+          vname<-gsub(rmv,"",vname)
+        }
+        ret[,vname]<-ifelse(data[,x[i]]==pos|data[,y[i]]==pos,pos,neg)
+      } else{
+        ret[,paste(addtn,i,sep = "")]<-ifelse(data[,x[i]]==pos|data[,y[i]]==pos,pos,neg)
+      }
+    } else{
+      if(usexnames==TRUE){
+        vname<-paste(x[i],addtn,sep = "")
+        if(rmv!='none'){
+          vname<-gsub(rmv,"",vname)
+        }
+        ret[,vname]<-ifelse(data[,x[i]]==pos&data[,y[i]]==pos,pos,neg)
+      } else{
+        ret[,paste(addtn,i,sep = "")]<-ifelse(data[,x[i]]==pos&data[,y[i]]==pos,pos,neg)
+      }
+    }
+  }
+  ret<-ret[,-1]
+  return(ret)
+}
+
+
+
+
