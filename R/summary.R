@@ -20,7 +20,7 @@ freqtbl_basic<-function(variable,name="Category",total=FALSE,countna=TRUE,orderb
   cnts[,1]<-as.character(cnts[,1])
   names(cnts)[1]<-name
   if (orderbycat == TRUE){
-    cnts<-cnts[order((cnts[1]),decreasing = reverseorder),]
+    cnts<-cnts[order((cnts[,1]),decreasing = reverseorder),]
   }
   else{
     cnts<-cnts[order((cnts$freq),decreasing = reverseorder),]
@@ -94,7 +94,7 @@ freqtbl<-function(variable,name="Category",total=FALSE,countna=TRUE,orderbycat=F
   cnts[,1]<-as.character(cnts[,1])
   names(cnts)[1]<-name
   if (orderbycat == TRUE){
-    cnts<-cnts[order((cnts[1]),decreasing = reverseorder),]
+    cnts<-cnts[order((cnts[,1]),decreasing = reverseorder),]
   }
   else{
     cnts<-cnts[order((cnts$freq),decreasing = reverseorder),]
