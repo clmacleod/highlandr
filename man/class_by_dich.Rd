@@ -12,7 +12,8 @@ class_by_dich(
   fieldnames = "none",
   colns = FALSE,
   pct = "none",
-  cnt = "none"
+  cnt = "none",
+  rnd_digs = 2
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ class_by_dich(
 \item{pct}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
 
 \item{cnt}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
+
+\item{rnd_digs}{the number of digits to which the results will be rounded}
 }
 \description{
 base building function for the class_by_dich suite, recommend using class_by_dich_fp. given a suite of binary variables and a class variable creates a data frame with rows as class variable elements and columns as variables and columns

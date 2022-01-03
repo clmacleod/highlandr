@@ -13,11 +13,12 @@ class_by_dich_fp(
   catname = "Class",
   fieldnames = "none",
   cols = TRUE,
-  pct = "none",
-  cnt = "none",
+  pct_t = "pct",
+  cnt_t = "none",
   transpose_result = TRUE,
   varlist_name = "Variable",
-  total = TRUE
+  total = TRUE,
+  digs = 2
 )
 }
 \arguments{
@@ -37,15 +38,17 @@ class_by_dich_fp(
 
 \item{cols}{boolean make the rows the same name as aggvars. default is TRUE}
 
-\item{pct}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
+\item{pct_t}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
 
-\item{cnt}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
+\item{cnt_t}{switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'}
 
 \item{transpose_result}{transposes the result so that rows are variables and columns are class variabe values. default is TRUE}
 
 \item{varlist_name}{the name given to the first column of the data frame which contains the list of variables in the aggvars binary suite. default is 'variable'}
 
 \item{total}{boolean indicating if a total column should be produced. default is TRUE}
+
+\item{digs}{the number of digits to which the results will be rounded}
 }
 \description{
 given a suite of binary variables and a class variable creates a data frame of frequencies and percents formatted as n(%) with rows as variables and columns as class variable elements using the function supplied

@@ -562,19 +562,22 @@ meantbl<-function(x,digs=2,ftouse=mean,rwnames='norowname',rwn_asvar=FALSE,rwn_a
 #' @param colns boolean make the rows the same name as aggvars. default is FALSE
 #' @param pct switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
 #' @param cnt switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
+#' @param rnd_digs the number of digits to which the results will be rounded
 #' @keywords class_by_dich binary dichotomous dich
 #' @export
 #' @examples
 #' class_by_dich_function()
 
-class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="none",colns=FALSE,pct='none',cnt='none'){
+class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="none",colns=FALSE,pct='none',cnt='none',rnd_digs = 2){
   fieldnames<-ifelse(fieldnames=="none",names(aggvars),fieldnames)
   bd<-as.data.frame(levels(as.factor(byvar)))
   colnames(bd)<-catname
 
   for (i in 1:length(aggvars)){
-    if (pct!='none'){t<-percent(aggregate(aggvars[,i],by=list(byvar),FUN=funct)[,2])}
-    else{t<-aggregate(aggvars[,i],by=list(byvar),FUN=funct)[,2]}
+    if (pct!='none'){t<-percent(aggregate(aggvars[,i],by=list(byvar),FUN=funct)[,2],digits = rnd_digs)}
+    else{t<-aggregate(aggvars[,i],by=list(byvar),FUN=funct)[,2]
+    t<-round(t,rnd_digs)
+    }
     bd<-cbind(bd,t)
   }
   if (colns==TRUE){
@@ -585,9 +588,7 @@ class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="non
     colnames(bd)[2:length(bd)]<-1:length(aggvars)
   } else if (pct!='none'){
     colnames(bd)[length(bd)]<-pct
-  } else{
-    colnames(bd)[2:length(bd)]<-1:length(aggvars)
-  }
+  } else{colnames(bd)[2:length(bd)]<-1:length(aggvars)}
 
   if (cnt!='none'){
     l<-ncol(bd)+1
@@ -602,6 +603,7 @@ class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="non
 
 
 
+
 #' class_by_dich_fp function
 #'
 #' given a suite of binary variables and a class variable creates a data frame of frequencies and percents formatted as n(%) with rows as variables and columns as class variable elements using the function supplied
@@ -613,19 +615,20 @@ class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="non
 #' @param catname the name given to the first column which contains the names of the variables supplied. default is 'Class'
 #' @param fieldnames vector of names to replace variable names supplied above in aggvars. if agvars = c("var1","var2","var3") and fiednames = c("do","ray","me") then the first variable in the returned dataset will be "do","ray","me"
 #' @param cols boolean make the rows the same name as aggvars. default is TRUE
-#' @param pct switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
-#' @param cnt switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
+#' @param pct_t switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
+#' @param cnt_t switch indicating if the results should be formatted as a percent. changing this variable to anything other than 'none' will activate the switch and rename the column to that value. default is 'none'
 #' @param transpose_result transposes the result so that rows are variables and columns are class variabe values. default is TRUE
 #' @param varlist_name the name given to the first column of the data frame which contains the list of variables in the aggvars binary suite. default is 'variable'
 #' @param total boolean indicating if a total column should be produced. default is TRUE
+#' @param digs the number of digits to which the results will be rounded
 #' @keywords class_by_dich binary dichotomous dich class_by_dich_fp fp
 #' @export
 #' @examples
 #' class_by_dich_fp_function()
 
-class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,catname="Class",fieldnames="none",cols=TRUE,pct='none',cnt='none',transpose_result=TRUE,varlist_name="Variable",total=TRUE){
-  cbd_cnt<-class_by_dich(data_to_use[,aggvars],data_to_use[,byvar],cnt=cnt,colns = cols,funct = cntfunc,catname = catname)
-  cbd_pct<-class_by_dich(data_to_use[,aggvars],data_to_use[,byvar],cnt=cnt,colns = cols,funct = pctfunc,pct = 'percent')
+class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,catname="Class",fieldnames="none",cols=TRUE,pct_t='pct',cnt_t='none',transpose_result=TRUE,varlist_name="Variable",total=TRUE,digs = 2){
+  cbd_cnt<-class_by_dich(data_to_use[,aggvars],data_to_use[,byvar],cnt=cnt_t,colns = cols,funct = cntfunc,catname = catname,rnd_digs = digs)
+  cbd_pct<-class_by_dich(data_to_use[,aggvars],data_to_use[,byvar],cnt=cnt_t,colns = cols,funct = pctfunc,pct = pct_t,rnd_digs = digs)
   class_freq<-table(data_to_use[,byvar])
   for(i in 2:ncol(cbd_cnt)){
     cbd_cnt[,i]<-fp(cbd_cnt[,i],cbd_pct[,i])
@@ -636,8 +639,8 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
     if(total==TRUE){
       cbd_cnt<-cbind(cbd_cnt,
                      "Total"=fp(
-                       t(class_by_dich(data_to_use[,aggvars],rep("all",nrow(data_to_use)),cnt=cnt,colns = cols,funct = cntfunc,catname = catname)),
-                       t(class_by_dich(data_to_use[,aggvars],rep("all",nrow(data_to_use)),cnt=cnt,colns = cols,funct = pctfunc,pct = 'percent')))[-1])
+                       t(class_by_dich(data_to_use[,aggvars],rep("all",nrow(data_to_use)),cnt=cnt_t,colns = cols,funct = cntfunc,catname = catname,rnd_digs = digs)),
+                       t(class_by_dich(data_to_use[,aggvars],rep("all",nrow(data_to_use)),cnt=cnt_t,colns = cols,funct = pctfunc,pct = pct_t,rnd_digs = digs)))[-1])
       names(cbd_cnt)[ncol(cbd_cnt)]<-paste("Total_n_",sum(class_freq),sep = "")
     }
   }
@@ -661,12 +664,13 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
 #' @param transpose_result transposes the result so that rows are variables and columns are class variabe values. default is TRUE
 #' @param varlist_name the name given to the first column of the data frame which contains the list of variables in the aggvars binary suite. default is 'variable'
 #' @param total boolean indicating if a total column should be produced. default is TRUE
+#' @param digs the number of digits to which the results will be rounded
 #' @keywords class_by_dich binary dichotomous dich noclass_by_dich_fp fp
 #' @export
 #' @examples
 #' class_by_dich_fp_function()
 
-noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catname="Total",fieldnames="none",cols=TRUE,pct='none',cnt='none',transpose_result=TRUE,varlist_name="Variable",total=TRUE){
+noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catname="Total",fieldnames="none",cols=TRUE,pct='none',cnt='none',transpose_result=TRUE,varlist_name="Variable",total=TRUE,digs=2){
   data_to_use[,"bvar"]<-""
   ret<-class_by_dich_fp(aggvars=aggvars,
                         byvar="bvar",
@@ -680,7 +684,8 @@ noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catnam
                         cnt=cnt,
                         transpose_result=transpose_result,
                         varlist_name=varlist_name,
-                        total=total)
+                        total=total,
+                        digs=digs)
   ret<-ret[,1:2]
   return(ret)
 }

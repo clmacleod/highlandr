@@ -16,7 +16,8 @@ noclass_by_dich_fp(
   cnt = "none",
   transpose_result = TRUE,
   varlist_name = "Variable",
-  total = TRUE
+  total = TRUE,
+  digs = 2
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ noclass_by_dich_fp(
 \item{varlist_name}{the name given to the first column of the data frame which contains the list of variables in the aggvars binary suite. default is 'variable'}
 
 \item{total}{boolean indicating if a total column should be produced. default is TRUE}
+
+\item{digs}{the number of digits to which the results will be rounded}
 }
 \description{
 given a suite of binary variables only this function creates a data frame of frequencies and percents formatted as n(%) with rows as variables
