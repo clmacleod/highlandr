@@ -26,5 +26,6 @@ Imports:
           tibble,
           chron,
           openssl,
-          ids
+          ids,
+          gtools
 RoxygenNote: 7.1.2

@@ -90,18 +90,27 @@ nequals<-function(x,cap=FALSE){
 #' converts na values in vector to "Missing" or any other value. if the variable is a factor then the value is added as a factor level. if 'missing' already exists as a factor level then it simply adds more 'missing'.
 #' @param x vector containing the na values
 #' @param fill character or numeric value to replace na with. default is 'Missing'.
+#' @param na_null string determining what type of value to replace (i.e. na, null, nan). Options are "na", "null", and "nan", any other value will replace all of these. default is "na".
 #' @keywords na miss na_to_miss
 #' @export
 #' @examples
 #' na_to_miss_function()
 
-na_to_miss<-function(x,fill="Missing"){
+na_to_miss<-function(x,fill="Missing",na_null="na"){
   if(is.factor(x)&sum(is.na(x))>0&!fill %in% levels(x)){
     levels <- levels(x)
     levels[length(levels) + 1] <- as.character(fill)
     x <- factor(x, levels = levels)
   }
-  x[is.na(x)]<-fill
+  if(na_null=="na"){
+    x[is.na(x)]<-fill
+  } else if(na_null=="null"){
+    x[is.null(x)]<-fill
+  } else if(na_null=="nan"){
+    x[is.nan(x)]<-fill
+  } else{
+    x[gtools::invalid(x)]<-fill
+  }
   return(x)
 }
 
@@ -432,26 +441,6 @@ create_studyid<-function(x,sha=FALSE){
     ret<-ids::random_id(1,use_openssl=FALSE)
   }
   return(ret)
-}
-
-
-
-#' list_to_vecs function
-#'
-#' takes a list of lists and converts the list elements to vectors
-#' @param x list of lists which you would like to convert to a list of vectors
-#' @keywords list_to_vecs list vector convert
-#' @export
-#' @examples
-#' list_to_vecs_function()
-#'
-list_to_vecs<-function(x){
-  if(is.null(x)){
-    x<-NA
-  } else {
-    x<-toString(x)
-  }
-  return(x)
 }
 
 

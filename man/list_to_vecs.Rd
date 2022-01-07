@@ -5,20 +5,14 @@
 \title{list_to_vecs function}
 \usage{
 list_to_vecs(x)
-
-list_to_vecs(x)
 }
 \arguments{
 \item{x}{list of lists which you would like to convert to a list of vectors}
 }
 \description{
-takes a list of lists and converts the list elements to vectors
-
 wrapper for n2n this function takes a list or dataframe that may contain lists and converts the list elements to vectors. This is useful when using functions like pivot_wider which can often return lists of lists.
 }
 \examples{
-list_to_vecs_function()
-
 list_to_vecs_function()
 
 }
