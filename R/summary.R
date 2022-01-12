@@ -644,6 +644,10 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
       names(cbd_cnt)[ncol(cbd_cnt)]<-paste("Total_n_",sum(class_freq),sep = "")
     }
   }
+  cbd_cnt<-data.frame(cbd_cnt)
+  if(fieldnames!="none"){
+    cbd_cnt[,1]<-fnames
+  }
   return(data.frame(cbd_cnt))
 }
 
