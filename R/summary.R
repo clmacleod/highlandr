@@ -645,9 +645,10 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
     }
   }
   cbd_cnt<-data.frame(cbd_cnt)
-  if(fieldnames!="none"){
+  if(sum(grepl("none",fieldnames))!=length(fieldnames)){
     cbd_cnt[,1]<-fieldnames
   }
+  rownames(cbd_cnt)<-NULL
   return(cbd_cnt)
 }
 
