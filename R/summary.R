@@ -646,9 +646,9 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
   }
   cbd_cnt<-data.frame(cbd_cnt)
   if(fieldnames!="none"){
-    cbd_cnt[,1]<-fnames
+    cbd_cnt[,1]<-fieldnames
   }
-  return(data.frame(cbd_cnt))
+  return(cbd_cnt)
 }
 
 
