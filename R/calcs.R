@@ -325,7 +325,16 @@ sf12_v2<-function(x,revcode_sf2=FALSE){
 all_missing_dich<-function(vars,data,allmissyes=1,allmissno=0,sumisna_fun="is.na"){
   vars_pres<-vars[vars %in% names(data)]
   num_vars<-length(vars_pres)
-  sum_of_nas<-unlist(apply(data[,vars_pres],1,highlandr::sumisna,funct=sumisna_fun))
-  ret<-ifelse(sum_of_nas<num_vars,allmissyes,allmissno)
+
+  if(num_vars>1){
+    sum_of_nas<-unlist(apply(data[,vars_pres],1,highlandr::sumisna,funct=sumisna_fun))
+    ret<-ifelse(sum_of_nas<num_vars,allmissyes,allmissno)
+  } else if(num_vars==1){
+    ret<-ifelse(is.na(data[,vars_pres]),allmissyes,allmissno)
+    print("only one variable found, sumisna_fun will be ignored")
+  } else{
+    print("no variables in vars found in data")
+  }
+
   return(ret)
 }
