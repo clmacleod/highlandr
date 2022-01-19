@@ -305,3 +305,27 @@ sf12_v2<-function(x,revcode_sf2=FALSE){
 
   return(list("ogvars"=y,"allvars"=x,"scales"=x[,scales],"aggs"=x[,aggs]))
 }
+
+
+
+
+#' all_missing_dich function
+#'
+#' given a vector of variable names and a dataset this function will find all of the variables in the vector that are present in the dataset and then of those determine (using sumisna) if all of them are NA.
+#' @param vars vector of variables to evaluate
+#' @param data dataset containing the variables
+#' @param allmissyes what to return if all of the variables are NA. Default is 1
+#' @param allmissno what to return if all of the variables are not NA. Defalt is 0
+#' @param sumisna_fun what function to pass to the sumisna function. default is 'is.na'
+#' @keywords all_missing_dich missing sumisna missingness all dich any
+#' @export
+#' @examples
+#' all_missing_dich_function()
+#'
+all_missing_dich<-function(vars,data,allmissyes=1,allmissno=0,sumisna_fun="is.na"){
+  vars_pres<-vars[vars %in% names(data)]
+  num_vars<-length(vars_pres)
+  sum_of_nas<-unlist(apply(data[,vars_pres],1,highlandr::sumisna,funct=sumisna_fun))
+  ret<-ifelse(sum_of_nas<num_vars,allmissyes,allmissno)
+  return(ret)
+}
