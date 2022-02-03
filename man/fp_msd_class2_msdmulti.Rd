@@ -7,19 +7,24 @@
 fp_msd_class2_msdmulti(
   x,
   vars,
+  col1names = NULL,
   varnames = c("Variables", "Function(s)"),
   classvar = NULL,
   funct1 = "mean",
   funct2 = "sd",
   shownval = TRUE,
+  sepnval = TRUE,
   total = TRUE,
+  smashfirstcols = FALSE,
   rnd_digs = 2
 )
 }
 \arguments{
 \item{x}{dataframe containing the data to be summarized}
 
-\item{vars}{vector of variable names for the varaibles that are to be summarized. all variables must be numeric and present in the data frame}
+\item{vars}{vector of variable names for the varaibles that are t be summarized. all variables must be numeric and present in the data frame}
+
+\item{col1names}{vector of names to change the rows in column 1 to. This is typically what you want the individual variables that the rows represent called in the table. this must be the same length as vars. default is NULL which simply returns vars.}
 
 \item{varnames}{vector of names to switch the first and second columns of the dataframe to. default is "Variables" and "Function(s)" respectively}
 
@@ -31,15 +36,13 @@ fp_msd_class2_msdmulti(
 
 \item{shownval}{boolean indicating if the n value used after na removal should be displayed in non fp cases. default is TRUE}
 
+\item{sepnval}{boolean indicating if the n value created using shownval should appear as a separate column in numeric form. default is TRUE meaning it will show up as a separate column. NOTE: if 'smashfirstcols' is set to TRUE this argument will automatically be changed to FALSE}
+
 \item{total}{boolean indicating if a 'total' column should be added to the data frame. default is TRUE}
 
+\item{smashfirstcols}{boolean indicating if the first columns (i.e. 'Variables', 'Function(s)) should be combined into a single first column. Default is FALSE meaning they will not be combined. NOTE: if this is TRUE sepnval will be set to FALSE}
+
 \item{rnd_digs}{the number of digits to round results to. default is 2}
-
-\item{rownvar}{name of the first column which contains either indvar categories or function names. default is 'Class'}
-
-\item{count_miss}{switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'}
-
-\item{count_miss_lab}{if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'}
 }
 \description{
 This function is a wrapper for fp_msd_class2 when there are multiple variables to analyze using functions outside of fp. Given a data frame and a vector of variable names this function will apply fp_msd_class2 to each one and rbind the results into a dataframe
@@ -48,8 +51,11 @@ This function is a wrapper for fp_msd_class2 when there are multiple variables t
 fp_msd_class2_msdmulti_function()
 
 }
-\keyword{collinear}
-\keyword{correlation}
+\keyword{class}
+\keyword{fp_msd}
+\keyword{fp_msd_class2}
 \keyword{fp_msd_class2_msdmulti}
-\keyword{multicollinear}
+\keyword{multi}
+\keyword{multiple}
+\keyword{summary}
 \keyword{variables}

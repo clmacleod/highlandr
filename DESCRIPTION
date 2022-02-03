@@ -1,6 +1,6 @@
 Package: highlandr
 Title: Random Useful Functions
-Version: 0.0.0.3
+Version: 0.0.1.0
 Authors@R: 
     person(given = "Colin",
            family = "Macleod",

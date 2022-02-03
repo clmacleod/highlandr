@@ -4,7 +4,7 @@
 \alias{rangelist}
 \title{rangelist conversion function}
 \usage{
-rangelist(x, quotes = TRUE, delimiter = ", ")
+rangelist(x, quotes = TRUE, delimiter = ", ", print_only = FALSE)
 }
 \arguments{
 \item{x}{is the vector containing the elements to be concatenated}
@@ -12,6 +12,8 @@ rangelist(x, quotes = TRUE, delimiter = ", ")
 \item{quotes}{boolean variable determining if each element should be surrounded by quotes (TRUE). the default for this argument is TRUE}
 
 \item{delimiter}{string argument of what the delimiter should be betweeen elements. the defualt for this agrument is ", "}
+
+\item{print_only}{whether the output should simply be written to the console unsing the base 'cat' function or should be stored as a value for later use. Default is FALSE indicating that it should be a value for later use}
 }
 \description{
 concatenates elements of a vector with options for quotes and delimiter. mimics the rangelist function that I created in vba

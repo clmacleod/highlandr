@@ -328,7 +328,7 @@ all_missing_dich<-function(vars,data,allmissyes=1,allmissno=0,sumisna_fun="is.na
 
   if(num_vars>1){
     sum_of_nas<-unlist(apply(data[,vars_pres],1,highlandr::sumisna,funct=sumisna_fun))
-    ret<-ifelse(sum_of_nas<num_vars,allmissyes,allmissno)
+    ret<-ifelse(sum_of_nas==num_vars,allmissyes,allmissno)
   } else if(num_vars==1){
     ret<-ifelse(is.na(data[,vars_pres]),allmissyes,allmissno)
     print("only one variable found, sumisna_fun will be ignored")

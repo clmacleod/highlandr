@@ -205,12 +205,13 @@ clear.labels <- function(x) {
 #' @param x is the vector containing the elements to be concatenated
 #' @param quotes boolean variable determining if each element should be surrounded by quotes (TRUE). the default for this argument is TRUE
 #' @param delimiter string argument of what the delimiter should be betweeen elements. the defualt for this agrument is ", "
+#' @param print_only whether the output should simply be written to the console unsing the base 'cat' function or should be stored as a value for later use. Default is FALSE indicating that it should be a value for later use
 #' @keywords rangelist character number
 #' @export
 #' @examples
 #' rangelist_function()
 
-rangelist<-function(x,quotes=TRUE,delimiter=", "){
+rangelist<-function(x,quotes=TRUE,delimiter=", ",print_only=FALSE){
   if (quotes==TRUE){
     for (i in 1:length(x)){
       if (i==1){
@@ -232,7 +233,11 @@ rangelist<-function(x,quotes=TRUE,delimiter=", "){
       }
     }
   }
-  return(cat(rnglist))
+  if(print_only){
+   return(cat(rnglist))
+  } else{
+  return(rnglist)
+  }
 }
 
 #' percent conversion function
