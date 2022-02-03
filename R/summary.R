@@ -936,7 +936,7 @@ fp_msd_class2_msdmulti<-function(x,vars,col1names=NULL,varnames=c("Variables","F
   databind<-highlandr::rename.variables(databind,newname = c(varnames,names(databind)[!names(databind) %in% c("terms","Class")]))
   if(sum(grepl("=",databind[,2]))>0&sepnval){
     databind<-tidyr::separate(databind,2,into=c("N","Function(s)")," ")
-    databind[,"N"]<-as.numeric(gsub("\\(n=|\\)","",prov_tbl_4.2[,"N"]))
+    databind[,"N"]<-as.numeric(gsub("\\(n=|\\)","",databind[,"N"]))
   }
   if(!is.null(col1names)){
     databind[,1]<-col1names
