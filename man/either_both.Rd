@@ -7,7 +7,7 @@
 either_both(
   x,
   y,
-  data,
+  data = NULL,
   either = TRUE,
   pos = 1,
   neg = 0,

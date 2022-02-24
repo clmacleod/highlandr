@@ -502,9 +502,10 @@ list_to_vecs<-function(x){
 #' @examples
 #' either_function()
 #'
-either_both<-function(x,y,data,either=TRUE,pos=1,neg=0,addtn="_comb",usexnames=TRUE,rmv='none'){
+either_both<-function(x,y,data=NULL,either=TRUE,pos=1,neg=0,addtn="_comb",usexnames=TRUE,rmv='none'){
   if(length(x)!=length(y)){"x and y must be the same length"}
   ret<-data.frame(rep(NA,nrow(data)))
+  if(is.null(data)){data<-data.frame("x"=x,"y"=y)}
   for(i in 1:length(x)){
     if(either){
       if(usexnames==TRUE){
