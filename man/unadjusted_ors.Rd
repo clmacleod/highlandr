@@ -9,7 +9,7 @@ unadjusted_ors(vars, outcome, x, digs = 3, staror = TRUE, starpval = TRUE)
 \arguments{
 \item{vars}{the vector of variable names to use for piecemeal comparison to the outcome variable}
 
-\item{outcome}{the outcome variable to use in the unadjusted models}
+\item{outcome}{the outcome variable to use in the unadjusted models. note, this should be in quotes (e.g. "outcome1")}
 
 \item{x}{the dataframe containing the outcome and covariate variables}
 

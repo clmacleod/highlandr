@@ -734,7 +734,7 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
 #'
 #' Given a vector of variable names, and outcome variable, and a data frame, this function will produce the unadjusted odds ratios and model output by using the lr_model_output function and running each variable independently against the outcome
 #' @param vars the vector of variable names to use for piecemeal comparison to the outcome variable
-#' @param outcome the outcome variable to use in the unadjusted models
+#' @param outcome the outcome variable to use in the unadjusted models. note, this should be in quotes (e.g. "outcome1")
 #' @param x the dataframe containing the outcome and covariate variables
 #' @param staror option passed to the lr_model_output function. Boolean indicating whether to apply star characters to odds ratios. default is TRUE
 #' @param starpval option passed to the lr_model_output function. Boolean indicating whether to apply star characters to p values. default is TRUE
@@ -746,11 +746,11 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
 #'
 unadjusted_ors<-function(vars,outcome,x,digs=3,staror=TRUE,starpval=TRUE){
   full_list<-list()
-  full_list[["intercept"]]<-lr_model_output(glm(formula_maker(outcome,1), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
+  full_list[["intercept"]]<-highlandr::lr_model_output(stats::glm(highlandr::formula_maker(outcome,1), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
   full_df<-full_list[["intercept"]]
 
   for(i in 1:length(vars)){
-    full_list[[vars[i]]]<-lr_model_output(glm(formula_maker(outcome,vars[i]), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
+    full_list[[vars[i]]]<-highlandr::lr_model_output(stats::glm(highlandr::formula_maker(outcome,vars[i]), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
     full_df<-rbind(full_df,full_list[[vars[i]]][-1,])
   }
 

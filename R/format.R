@@ -40,7 +40,7 @@ sumisna<-function(x,funct="is.na"){
 #' @examples
 #' formula_maker_function()
 formula_maker <- function(outcome,covars){
-  fml<-as.formula(paste(outcome, "~", paste(covars, collapse=" + ")))
+  fml<-stats::as.formula(paste(outcome, "~", paste(covars, collapse=" + ")))
   return(fml)
 }
 
