@@ -30,6 +30,22 @@ sumisna<-function(x,funct="is.na"){
 
 
 
+#' formula_maker function
+#'
+#' This function takes as it's input an outcome variable and a vector of covariates and creates a formula object with the covariates separated by '+'. Note this is only for linear models
+#' @param outcome the outcome variable name. note, this should be in quotes (e.g. "outcome1")
+#' @param covars the vector of covariates to collapse
+#' @keywords formula_maker formula maker linear model
+#' @export
+#' @examples
+#' formula_maker_function()
+formula_maker <- function(outcome,covars){
+  fml<-as.formula(paste(outcome, "~", paste(covars, collapse=" + ")))
+  return(fml)
+}
+
+
+
 
 #' tween function
 #'

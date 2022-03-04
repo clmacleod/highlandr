@@ -26,4 +26,5 @@ lr_model_output_function()
 \keyword{logistic}
 \keyword{lr_model_output}
 \keyword{odds}
+\keyword{or}
 \keyword{ratio}

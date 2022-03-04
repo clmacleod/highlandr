@@ -707,16 +707,16 @@ noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catnam
 #' @param staror boolean indicating whether to apply star characters to odds ratios. default is TRUE
 #' @param starpval boolean indicating whether to apply star characters to p values. default is TRUE
 #' @param digs the number of digits to round the values to. default is 3
-#' @keywords lr_model_output lm logistic odds ratio
+#' @keywords lr_model_output lm logistic odds ratio or
 #' @export
 #' @examples
 #' lr_model_output_function()
 #'
 lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
   coefi<-as.data.frame(summary(model)$coefficients)
-  suppressMessages(coefi<-cbind(coefi,confint(model)))
+  suppressMessages(coefi<-cbind(coefi,highlandr::rename.variables(data.frame(matrix(confint(model),ncol = 2)),c("2.5%","97.5%"))))
   coefi$or<-exp(coefi$Estimate)
-  suppressMessages(coefi<-cbind(coefi,exp(confint(model))))
+  suppressMessages(coefi<-cbind(coefi,highlandr::rename.variables(data.frame(matrix(exp(confint(model)),ncol = 2)),c("or 2.5%","or 97.5%"))))
   coefi<-round(coefi,digs)
   if(staror==TRUE){
     coefi$or<-pval_star(coefi$`Pr(>|z|)`,coefi$or,vec_return = TRUE)
@@ -728,6 +728,41 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
   coefi<-rown_to_var(coefi)
   return(coefi)
 }
+
+
+#' unadjusted_ors function
+#'
+#' Given a vector of variable names, and outcome variable, and a data frame, this function will produce the unadjusted odds ratios and model output by using the lr_model_output function and running each variable independently against the outcome
+#' @param vars the vector of variable names to use for piecemeal comparison to the outcome variable
+#' @param outcome the outcome variable to use in the unadjusted models
+#' @param x the dataframe containing the outcome and covariate variables
+#' @param staror option passed to the lr_model_output function. Boolean indicating whether to apply star characters to odds ratios. default is TRUE
+#' @param starpval option passed to the lr_model_output function. Boolean indicating whether to apply star characters to p values. default is TRUE
+#' @param digs option passed to the lr_model_output function. The number of digits to round the values to. default is 3
+#' @keywords unadjusted_ors unadjusted adjust lr_model_output lm logistic odds ratio or
+#' @export
+#' @examples
+#' unadjusted_ors_function()
+#'
+unadjusted_ors<-function(vars,outcome,x,digs=3,staror=TRUE,starpval=TRUE){
+  full_list<-list()
+  full_list[["intercept"]]<-lr_model_output(glm(formula_maker(outcome,1), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
+  full_df<-full_list[["intercept"]]
+
+  for(i in 1:length(vars)){
+    full_list[[vars[i]]]<-lr_model_output(glm(formula_maker(outcome,vars[i]), data=x,family = 'binomial'),digs = digs,staror = staror,starpval = starpval)
+    full_df<-rbind(full_df,full_list[[vars[i]]][-1,])
+  }
+
+  or_ci_df<-full_df[,c("terms","or","or 2.5%","or 97.5%")]
+  or_df<-full_df[,c("terms","or")]
+  or_only<-full_df$or
+
+  return(list("full_list"=full_list,"full_df"=full_df,"or_ci_df"=or_ci_df,"or_df"=or_df,"or_only"=or_only))
+}
+
+
+
 
 
 
