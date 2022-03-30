@@ -712,7 +712,7 @@ noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catnam
 #' @examples
 #' lr_model_output_function()
 #'
-lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
+lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3,knit_cis=TRUE){
   coefi<-as.data.frame(summary(model)$coefficients)
   suppressMessages(coefi<-cbind(coefi,highlandr::rename.variables(data.frame(matrix(confint(model),ncol = 2)),c("2.5%","97.5%"))))
   coefi$or<-exp(coefi$Estimate)
@@ -725,6 +725,7 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3){
     coefi$`Pr(>|z|)`<-pval_star(coefi$`Pr(>|z|)`)[[1]]
   }
   coefi<-coefi[,c(1,5,6,2:4,7:9)]
+  if(knit_cis({coefi$or_cis<-paste("[",coefi$'or 2.5%',"-",coefi$'or 97.5%',"]")}))
   coefi<-rown_to_var(coefi)
   return(coefi)
 }

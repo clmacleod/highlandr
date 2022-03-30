@@ -338,3 +338,38 @@ all_missing_dich<-function(vars,data,allmissyes=1,allmissno=0,sumisna_fun="is.na
 
   return(ret)
 }
+
+
+
+
+#' or_pct function
+#'
+#' given a vector of variable names and a dataset this function will find all of the variables in the vector that are present in the dataset and then of those determine (using sumisna) if all of them are NA.
+#' @param vars vector of variables to evaluate
+#' @param data dataset containing the variables
+#' @param allmissyes what to return if all of the variables are NA. Default is 1
+#' @param allmissno what to return if all of the variables are not NA. Defalt is 0
+#' @param sumisna_fun what function to pass to the sumisna function. default is 'is.na'
+#' @keywords or_pct or odds ratio percent
+#' @export
+#' @examples
+#' all_missing_dich_function()
+#'
+or_pct<-function(x,digs=0,knit=FALSE){
+  inc_dcr<-ifelse(x==1,"didn't change",
+                  ifelse(x>1,"increase","decrease"))
+  if(inc_dcr=="increase"){
+    pct<-highlandr::percent((x-1),digs)
+  } else if (inc_dcr=="decrease"){
+    pct<-highlandr::percent((1-x),digs)
+  } else{
+    pct<-0
+  }
+
+  if(knit & pct==0){
+    return(inc_dcr)
+  }else if (knit & pct !=0){
+    return(paste(pct,inc_dcr))
+  }else if (!knit)
+    return(c(pct,inc_dcr))
+}

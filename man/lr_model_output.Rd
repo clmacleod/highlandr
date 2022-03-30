@@ -4,7 +4,13 @@
 \alias{lr_model_output}
 \title{lr_model_output function}
 \usage{
-lr_model_output(model, staror = TRUE, starpval = TRUE, digs = 3)
+lr_model_output(
+  model,
+  staror = TRUE,
+  starpval = TRUE,
+  digs = 3,
+  knit_cis = TRUE
+)
 }
 \arguments{
 \item{model}{the output from a logistic regression model e.g. lrmodel<-lm(outcome~vars,data,family='binomial')}
