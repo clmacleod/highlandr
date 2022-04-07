@@ -1006,18 +1006,24 @@ fp_msd_class2_msdmulti<-function(x,vars,col1names=NULL,varnames=c("Variables","F
 #' @examples
 #' sig_val_auto_function()
 #'
-sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction_type='none',sig=.05,stars=TRUE,digs=3){
+sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction_type='none',sig=.05,stars=TRUE,digs=3,fisher_dd=FALSE){
   sigtable<-data.frame("Variables"=variables,"Unadjusted Sigs"=NA)
 
   for(i in 1:length(variables)){
     #print(sigtable)
     if(crossvartype=="b"){
-      if(testtypes[i]=="b"|testtypes[i]=="f"){
+      if(testtypes[i]=="b"){
+        if(sum(table(data[,variables[i]],data[,crossvar]))<10|fisher_dd==TRUE){
+          sigtable[i,2]<-fisher.test(data[,variables[i]],data[,crossvar])$p.value
+        } else{
+          sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
+        }
+      } else if(testtypes[i]=="f"){
         sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
       } else if(shapiro.test(data[,variables[i]])$p.value>sig){
-        sigtable[i,2]<-t.test(data[,variables[i]],data[,crossvar])$p.value
+        sigtable[i,2]<-t.test(data[,variables[i]]~data[,crossvar])$p.value
       } else{
-        sigtable[i,2]<-wilcox.test(data[,variables[i]],data[,crossvar])$p.value}
+        sigtable[i,2]<-wilcox.test(data[,variables[i]]~data[,crossvar])$p.value}
     } else if(crossvartype=="f"){
       if(testtypes[i]=="b"|testtypes[i]=="f"){
         sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
@@ -1031,7 +1037,7 @@ sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction
   }
 
   if(correction_type!='none'){
-    sigtable[,"Adjusted Sigs"]<-stats::p.adjust(sigtable[,2],method = correction_type)
+    sigtable[,"Adjusted Sigs"]<-p.adjust(sigtable[,2],method = correction_type)
   }
 
   sigtable[,-1]<-round(sigtable[,-1],digs)
@@ -1043,6 +1049,7 @@ sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction
   return(sigtable)
 
 }
+
 
 
 

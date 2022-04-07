@@ -13,7 +13,8 @@ sig_val_auto(
   correction_type = "none",
   sig = 0.05,
   stars = TRUE,
-  digs = 3
+  digs = 3,
+  fisher_dd = FALSE
 )
 }
 \arguments{
