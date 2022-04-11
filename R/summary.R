@@ -725,7 +725,7 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3,knit_cis=TRUE){
     coefi$`Pr(>|z|)`<-pval_star(coefi$`Pr(>|z|)`)[[1]]
   }
   coefi<-coefi[,c(1,5,6,2:4,7:9)]
-  if(knit_cis){coefi$or_cis<-paste("[",coefi$'or 2.5%',"-",coefi$'or 97.5%',"]")}
+  if(knit_cis){coefi$or_cis<-paste("[",format(coefi$'or 2.5%',nsmall=digs),"-",format(coefi$'or 97.5%',nsmall=digs),"]",sep="")}
   coefi<-rown_to_var(coefi)
   return(coefi)
 }
