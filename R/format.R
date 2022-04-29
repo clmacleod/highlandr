@@ -551,4 +551,20 @@ either_both<-function(x,y,data=NULL,either=TRUE,pos=1,neg=0,addtn="_comb",usexna
 
 
 
+#' pair_them_shits function
+#'
+#' Given a wide dataset and a vector of variable names this function performs pairwise deletion of records on the given variables. That is, it will return a subset of the given dataframe where there are no na's in any of the given variables thus leaving a dataset where only fully paired observations are present.
+#' @param d dataframe that you want limited to paired observations
+#' @param pairvars vector of quoted variable names in the dataset to be evaluated for pairwise completion.
+#' @keywords pair pairwise paired them shits
+#' @export
+#' @examples
+#' pair_them_shits()
+#'
+pair_them_shits<-function(d, pairvars){
+  d<-d[apply(d[,pairvars],1,highlandr::sumisna)==0,]
+  return(d)
+}
+
+
 
