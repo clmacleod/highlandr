@@ -53,14 +53,26 @@ formula_maker <- function(outcome,covars){
 #' @param x is the number to check
 #' @param bot the lower (bottom) number to check against
 #' @param top the higher (top) number to check against
+#' @param tb_symmetry this switch stands for 'top and bottom symmetry' and can take on 4 values "inclusive", "gt_bot", "lt_top", "exclusive". These switches dictate whether the function includes or excludes the top and bottom numbers. The default value is "inclusive" which includes the top and bottom numbers, "gt_bot" does greater than the bottom number but less than or equal to the top, "lt_top" does greater than or equal to the bottom number but less than the top, "exclusive" performs greater than bottom number and less than top number
 #' @keywords tween between
 #' @export
 #' @examples
 #' tween_function()
 
-tween<-function(x,bot,top){
+tween<-function(x,bot,top,tb_symmetry="inclusive"){
   if (typeof(x)=="character"){x<-as.numeric(as.character(x))}
-  result<-ifelse(x>=bot & x<=top,TRUE,FALSE)
+
+  if (tb_symmetry=="inclusive"){
+    result<-ifelse(x>=bot & x<=top,TRUE,FALSE)
+  } else if (tb_symmetry=="gt_bot"){
+    result<-ifelse(x>bot & x<=top,TRUE,FALSE)
+  } else if (tb_symmetry=="lt_top"){
+    result<-ifelse(x>=bot & x<top,TRUE,FALSE)
+  } else if (tb_symmetry=="exclusive"){
+    result<-ifelse(x>bot & x<top,TRUE,FALSE)
+  } else{
+    print("tb_symmetry needs to be one of the 4 prescribed options")
+  }
   return(result)
 }
 

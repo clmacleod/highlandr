@@ -4,7 +4,7 @@
 \alias{tween}
 \title{tween function}
 \usage{
-tween(x, bot, top)
+tween(x, bot, top, tb_symmetry = "inclusive")
 }
 \arguments{
 \item{x}{is the number to check}
@@ -12,6 +12,8 @@ tween(x, bot, top)
 \item{bot}{the lower (bottom) number to check against}
 
 \item{top}{the higher (top) number to check against}
+
+\item{tb_symmetry}{this switch stands for 'top and bottom symmetry' and can take on 4 values "inclusive", "gt_bot", "lt_top", "exclusive". These switches dictate whether the function includes or excludes the top and bottom numbers. The default value is "inclusive" which includes the top and bottom numbers, "gt_bot" does greater than the bottom number but less than or equal to the top, "lt_top" does greater than or equal to the bottom number but less than the top, "exclusive" performs greater than bottom number and less than top number}
 }
 \description{
 This function checks whether a number is betwee two other numbers
