@@ -239,11 +239,15 @@ varlist<-function(x){
 
 x2bundle<-function(d1,d2){
   ctabs<-table(d1,d2)
-  x2vals<-chisq.test(ctabs)
-  x2es<-ES.chisq.assoc(ct=ctabs,chisq=x2vals,p=x2vals$p.value,df=x2vals$parameter)
+  ctabs_w_props<-highlandr::fp_msd_class2(d1,d2)
+  x2vals<-stats::chisq.test(ctabs)
+  x2es<-powerAnalysis::ES.chisq.assoc(ct=ctabs,chisq=x2vals,p=x2vals$p.value,df=x2vals$parameter)
   sig<-ifelse(x2vals$p.value<.05,1,0)
+  posthoc<-chisq.posthoc.test::chisq.posthoc.test(table(d1,d2))
+  ctabs_w_props_star<-ctabs_w_props
+  ctabs_w_props_star[,3:ncol(ctabs_w_props_star)]<-highlandr::pval_star(posthoc[posthoc$Value=="p values",3:ncol(ctabs_w_props_star)],ctabs_w_props_star[,3:ncol(ctabs_w_props_star)])
 
-  results<-list(ctabs=ctabs,x2vals=x2vals,x2es=x2es,sig=sig)
+  results<-list(ctabs=ctabs,ctabs_w_props=ctabs_w_props,x2vals=x2vals,x2es=x2es,sig=sig,posthoc=posthoc)
   return(results)
 }
 
@@ -779,46 +783,56 @@ unadjusted_ors<-function(vars,outcome,x,digs=3,staror=TRUE,starpval=TRUE){
 #' @examples
 #' varcompare_function()
 #'
-varcompare<-function(d,vars,vartypes){
+varcompare<-function(d,vars,vartypes,force_pc=FALSE){
   x<-d[,vars]
   bimat<-data.frame(matrix(nrow = length(vars),ncol = length(vars),dimnames = list(vars,vars)))
+  testmap<-bimat<-data.frame(matrix(nrow = length(vars),ncol = length(vars),dimnames = list(vars,vars)))
+
+  if(nrow(x)>nrow(x[complete.cases(x),])){print("some cases have missing data, associations will be computed without the missing values")}
 
   for (i in 1:length(vars)){
     for (j in 1:length(vars)){
       #if both variables are dichotomous (i.e. d,d)
       if (vartypes[i]=="d"&vartypes[j]=="d"){
-        bimat[i,j]<-pval_star(chisq.test(d[,vars[i]],d[,vars[j]])$p.value,Phi(d[,vars[i]],d[,vars[j]]),vec_return = TRUE,digs = 3)
+        bimat[i,j]<-pval_star(stats::chisq.test(d[,vars[i]],d[,vars[j]])$p.value,DescTools::Phi(d[,vars[i]],d[,vars[j]]),vec_return = TRUE,digs = 3)
+        testmap[i,j]<-"Phi"
       }
       #if the variables are dichotomous and nominal or both nominal (i.e. d,n; n,d; n,n)
       if ((vartypes[i]=="d"&vartypes[j]=="n")|(vartypes[i]=="n"&vartypes[j]=="d")|(vartypes[i]=="n"&vartypes[j]=="n")){
-        bimat[i,j]<-pval_star(chisq.test(d[,vars[i]],d[,vars[j]])$p.value,CramerV(d[,vars[i]],d[,vars[j]]),vec_return = TRUE,digs = 3)
+        bimat[i,j]<-pval_star(stats::chisq.test(d[,vars[i]],d[,vars[j]])$p.value,DescTools::cramersV(d[,vars[i]],d[,vars[j]]),vec_return = TRUE,digs = 3)
+        testmap[i,j]<-"Cramer's V"
       }
       #if variables are continuous and dichotomousl (i.e. c,d; d,c)
       if ((vartypes[i]=="d"&vartypes[j]=="c")|(vartypes[i]=="c"&vartypes[j]=="d")){
-        bimat[i,j]<-pval_star(cor.test(d[,vars[i]],d[,vars[j]])$p.value,cor.test(d[,vars[i]],d[,vars[j]])$estimate,vec_return = TRUE,digs = 3)
+        bimat[i,j]<-pval_star(stats::cor.test(d[,vars[i]],d[,vars[j]])$p.value,stats::cor.test(d[,vars[i]],d[,vars[j]])$estimate,vec_return = TRUE,digs = 3)
+        testmap[i,j]<-"PBS Corr"
       }
       #if variables are and nominal (i.e. n,c; c,n)
       if ((vartypes[i]=="n"&vartypes[j]=="c")|(vartypes[i]=="c"&vartypes[j]=="n")){
         if (vartypes[i]=="n"){
-          amod<-anova(lm(d[,vars[j]]~d[,vars[i]]))
+          amod<-stats::anova(stats::lm(d[,vars[j]]~d[,vars[i]]))
         }
         if (vartypes[i]=="c"){
-          amod<-anova(lm(d[,vars[i]]~d[,vars[j]]))
+          amod<-stats::anova(stats::lm(d[,vars[i]]~d[,vars[j]]))
         }
-        bimat[i,j]<-pval_star(amod$`Pr(>F)`[1],omega_sq(amod)$omegasq,vec_return = TRUE,digs = 3)
+        bimat[i,j]<-pval_star(amod$`Pr(>F)`[1],effectsize::omega_sq(amod)$omegasq,vec_return = TRUE,digs = 3)
+        testmap[i,j]<-"Omega Squared"
       }
       #if variables are both continuous (i.e. c,c)
       if (vartypes[i]=="c"&vartypes[j]=="c"){
-        if (shapiro.test(d[,vars[i]])$p.value<.05|shapiro.test(d[,vars[j]])$p.value<.05){
-          bimat[i,j]<-pval_star(t.test(d[,vars[i]],d[,vars[j]])$p.value,SpearmanRho(d[,vars[i]],d[,vars[j]]),vec_return = TRUE,digs = 3)
+        if ((stats::shapiro.test(d[,vars[i]])$p.value>.05|stats::shapiro.test(d[,vars[j]])$p.value>.05)|force_pc){
+          bimat[i,j]<-pval_star(stats::cor.test(d[,vars[i]],d[,vars[j]])$p.value,stats::cor.test(d[,vars[i]],d[,vars[j]])$estimate,vec_return = TRUE,digs = 3)
+          testmap[i,j]<-"Pearson Corr"
         }
         else{
-          bimat[i,j]<-pval_star(cor.test(d[,vars[i]],d[,vars[j]])$p.value,cor.test(d[,vars[i]],d[,vars[j]])$estimate,vec_return = TRUE,digs = 3)
+          bimat[i,j]<-pval_star(stats::cor.test(d[,vars[i]],d[,vars[j]],method="spearman")$p.value,stats::cor.test(d[,vars[i]],d[,vars[j]],method="spearman")$estimate,vec_return = TRUE,digs = 3)
+          testmap[i,j]<-"Spearman Rho"
+
         }
       }
     }
   }
-  return(bimat)
+  return(list("comparisons"=bimat,"test_types"=testmap))
 }
 
 
@@ -997,53 +1011,88 @@ fp_msd_class2_msdmulti<-function(x,vars,col1names=NULL,varnames=c("Variables","F
 #' @param data the data frame containing the variables in 'variables' and 'crossvar'
 #' @param crossvartype the type of the cross variable. types can be 'b', 'f' which are binary, and factor respectively
 #' @param testtypes a vector of types of the variables. types can be 'b', 'f', or 'c' which are binary, factor, and continuous respectively
+#' @param reporttest boolean indicating if the type of test run should be added as a variable, default is yes
 #' @param correction_type type of p value correction to apply for multiple comparisons. default is 'none'. this uses the p.adjust from stats package so any adjustment name there will work here
 #' @param sig the significance value to use. default is .05
 #' @param stars boolean indicating whether to add stars to significance values. default is TRUE
 #' @param digs number of digits to round values to. default is 3
+#' @param force_fisher boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20% expected values below 5)
+#' @param force_anova boolean indicating if anova should be used with a factor and continuous variable even normality (shapiro wilk) is violated
+#' @param force_t boolean indicating if t test should be used with a binary and continuous variable even normality (shapiro wilk) is violated
 #' @keywords sig_val_auto significance pvalue p value crosstab
 #' @export
 #' @examples
 #' sig_val_auto_function()
 #'
-sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,correction_type='none',sig=.05,stars=TRUE,digs=3,fisher_dd=FALSE){
-  sigtable<-data.frame("Variables"=variables,"Unadjusted Sigs"=NA)
+sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,reporttest=TRUE,correction_type='none',sig=.05,stars=TRUE,digs=3,force_fisher=FALSE,force_anova=FALSE,force_t=FALSE){
+  if(reporttest){
+    sigtable<-data.frame("Variables"=variables,"Unadjusted Sigs"=NA,"Test Type"=NA)
+  } else{
+    sigtable<-data.frame("Variables"=variables,"Unadjusted Sigs"=NA)
+  }
 
   for(i in 1:length(variables)){
-    #print(sigtable)
+
     if(crossvartype=="b"){
       if(testtypes[i]=="b"){
-        if(sum(table(data[,variables[i]],data[,crossvar]))<10|fisher_dd==TRUE){
-          sigtable[i,2]<-fisher.test(data[,variables[i]],data[,crossvar])$p.value
+        # when to run fishers https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5426219/#:~:text=The%20chi%2Dsquared%20test%20applies,especially%20for%20small%2Dsized%20samples.
+        # sample size and 2x2 http://www.biostathandbook.com/fishers.html#:~:text=Fisher's%20exact%20test%20is%20more,test%20for%20larger%20sample%20sizes.
+        prex2<-stats::chisq.test(data[,variables[i]],data[,crossvar])
+
+        if((sum(prex2$observed)<1000&
+            nrow(prex2$observed)==2&
+            ncol(prex2$observed)==2&
+            (sum(prex2$expected<5)/(ncol(ttt$observed)*nrow(ttt$observed))<.2))
+           |force_fisher){
+          sigtable[i,2]<-stats::fisher.test(data[,variables[i]],data[,crossvar])$p.value
+          sigtable[i,3]<-"Fisher's Exact"
+
         } else{
-          sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
+          sigtable[i,2]<-prex2$p.value
+          sigtable[i,3]<-"Chi Square"
         }
       } else if(testtypes[i]=="f"){
-        sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
-      } else if(shapiro.test(data[,variables[i]])$p.value>sig){
-        sigtable[i,2]<-t.test(data[,variables[i]]~data[,crossvar])$p.value
+        sigtable[i,2]<-stats::chisq.test(data[,variables[i]],data[,crossvar])$p.value
+        sigtable[i,3]<-"Chi Square"
+
+      } else if(stats::shapiro.test(data[,variables[i]])$p.value>sig|force_t){
+        sigtable[i,2]<-stats::t.test(data[,variables[i]]~data[,crossvar])$p.value
+        sigtable[i,3]<-"Student's T"
+
       } else{
-        sigtable[i,2]<-wilcox.test(data[,variables[i]]~data[,crossvar])$p.value}
+        sigtable[i,2]<-stats::wilcox.test(data[,variables[i]]~data[,crossvar])$p.value
+        sigtable[i,3]<-"Wilcoxon Rank Sum"
+      }
+
     } else if(crossvartype=="f"){
       if(testtypes[i]=="b"|testtypes[i]=="f"){
-        sigtable[i,2]<-chisq.test(data[,variables[i]],data[,crossvar])$p.value
-      } else if(shapiro.test(data[,variables[i]])$p.value>sig){
-        sigtable[i,2]<-anova(lm(data[,variables[i]]~data[,crossvar]))$`Pr(>F)`
+        sigtable[i,2]<-stats::chisq.test(data[,variables[i]],data[,crossvar])$p.value
+        sigtable[i,3]<-"Chi Square"
+
+      } else if(stats::shapiro.test(data[,variables[i]])$p.value>sig|force_anova){
+        sigtable[i,2]<-stats::anova(lm(data[,variables[i]]~data[,crossvar]))$`Pr(>F)`[1]
+        sigtable[i,3]<-"ANOVA"
+
       } else{
-        sigtable[i,2]<-kruskal.test(data[,variables[i]],data[,crossvar])$p.value
+        sigtable[i,2]<-stats::kruskal.test(data[,variables[i]],data[,crossvar])$p.value
+        sigtable[i,3]<-"Kruskal Wallis"
+
       }
     }
     #else{sigtable[i,2]<-"something's up"}
   }
 
   if(correction_type!='none'){
-    sigtable[,"Adjusted Sigs"]<-p.adjust(sigtable[,2],method = correction_type)
+    sigtable[,"Adjusted Sigs"]<-stats::p.adjust(sigtable[,2],method = correction_type)
+    if(reporttest){sigtable<-sigtable[,c(1,3,2,4)]}
+  } else{
+    sigtable<-sigtable[,c(1,3,2)]
   }
 
-  sigtable[,-1]<-round(sigtable[,-1],digs)
+  sigtable[,3:ncol(sigtable)]<-round(sigtable[,3:ncol(sigtable)],digs)
 
   if(stars==TRUE){
-    sigtable[,-1]<-pval_star(sigtable[,-1])
+    sigtable[,3:ncol(sigtable)]<-pval_star(sigtable[,3:ncol(sigtable)])
   }
 
   return(sigtable)

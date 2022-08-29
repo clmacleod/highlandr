@@ -10,11 +10,14 @@ sig_val_auto(
   data,
   crossvartype,
   testtypes,
+  reporttest = TRUE,
   correction_type = "none",
   sig = 0.05,
   stars = TRUE,
   digs = 3,
-  fisher_dd = FALSE
+  force_fisher = FALSE,
+  force_anova = FALSE,
+  force_t = FALSE
 )
 }
 \arguments{
@@ -28,6 +31,8 @@ sig_val_auto(
 
 \item{testtypes}{a vector of types of the variables. types can be 'b', 'f', or 'c' which are binary, factor, and continuous respectively}
 
+\item{reporttest}{boolean indicating if the type of test run should be added as a variable, default is yes}
+
 \item{correction_type}{type of p value correction to apply for multiple comparisons. default is 'none'. this uses the p.adjust from stats package so any adjustment name there will work here}
 
 \item{sig}{the significance value to use. default is .05}
@@ -35,6 +40,12 @@ sig_val_auto(
 \item{stars}{boolean indicating whether to add stars to significance values. default is TRUE}
 
 \item{digs}{number of digits to round values to. default is 3}
+
+\item{force_fisher}{boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20% expected values below 5)}
+
+\item{force_anova}{boolean indicating if anova should be used with a factor and continuous variable even normality (shapiro wilk) is violated}
+
+\item{force_t}{boolean indicating if t test should be used with a binary and continuous variable even normality (shapiro wilk) is violated}
 }
 \description{
 significance values creator with adjustment option testtypes and crossvar type can take the form (b,f,c) for binary, factor, or continuous

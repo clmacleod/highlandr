@@ -4,7 +4,7 @@
 \alias{varcompare}
 \title{varcompare function}
 \usage{
-varcompare(d, vars, vartypes)
+varcompare(d, vars, vartypes, force_pc = FALSE)
 }
 \arguments{
 \item{d}{data frame containing all variables to be compared}
