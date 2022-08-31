@@ -29,6 +29,21 @@ sumisna<-function(x,funct="is.na"){
 }
 
 
+#' round_if_num function
+#'
+#' This function takes as it's input a dataframe and rounds all numeric variables to the number of digs supplied thus avoiding the error when applying 'round' to a dataframe that contains non-numeric variables
+#' @param x The dataset for which you want the numeric variables rounded
+#' @param digs the number of digits to round the numeric variables to
+#' @param except a vector of numeric variables to leave out of the rounding
+#' @keywords round_if_num round round_if is.numric
+#' @export
+#' @examples
+#' round_if_num()
+round_if_num<-function(x,digs=3,except=NULL){
+  x[unlist(lapply(x,is.numeric))&!names(x) %in% except]<-round(x[unlist(lapply(x,is.numeric))&!names(x) %in% except],digs)
+  return(x)
+}
+
 
 #' formula_maker function
 #'
