@@ -711,6 +711,7 @@ noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catnam
 #' @param staror boolean indicating whether to apply star characters to odds ratios. default is TRUE
 #' @param starpval boolean indicating whether to apply star characters to p values. default is TRUE
 #' @param digs the number of digits to round the values to. default is 3
+#' @param knit_cis boolean indicating if the confidence intervals should be knit into an extra variable in the format "[lwr-upr]"
 #' @keywords lr_model_output lm logistic odds ratio or
 #' @export
 #' @examples
@@ -727,6 +728,38 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3,knit_cis=TRUE){
   }
   if(starpval==TRUE){
     coefi$`Pr(>|z|)`<-pval_star(coefi$`Pr(>|z|)`)[[1]]
+  }
+  coefi<-coefi[,c(1,5,6,2:4,7:9)]
+  if(knit_cis){coefi$or_cis<-paste("[",format(coefi$'or 2.5%',nsmall=digs),"-",format(coefi$'or 97.5%',nsmall=digs),"]",sep="")}
+  coefi<-rown_to_var(coefi)
+  return(coefi)
+}
+
+
+
+#' gee_model_output function
+#'
+#' creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95% confints (only tested on LR models though should work with most others)
+#' @param model the output from a logistic regression model e.g. lrmodel<-lm(outcome~vars,data,family='binomial')
+#' @param staror boolean indicating whether to apply star characters to odds ratios. default is TRUE
+#' @param starpval boolean indicating whether to apply star characters to p values. default is TRUE
+#' @param digs the number of digits to round the values to. default is 3
+#' @param knit_cis boolean indicating if the confidence intervals should be knit into an extra variable in the format "[lwr-upr]"
+#' @keywords lr_model_output lm logistic odds ratio or
+#' @export
+#' @examples
+#' gee_model_output()
+#'
+gee_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3,knit_cis=TRUE){
+  coefi<-confint.geeglm(model)
+  coefi$or<-exp(coefi$Estimate)
+  suppressMessages(coefi<-cbind(coefi,highlandr::rename.variables(exp(coefi[,c("lwr","upr")]),c("or 2.5%","or 97.5%"))))
+  coefi<-round_if_num(coefi,digs)
+  if(staror==TRUE){
+    coefi$or<-pval_star(coefi$`Pr(>|W|)`,coefi$or,vec_return = TRUE)
+  }
+  if(starpval==TRUE){
+    coefi$`Pr(>|W|)`<-pval_star(coefi$`Pr(>|W|)`)[[1]]
   }
   coefi<-coefi[,c(1,5,6,2:4,7:9)]
   if(knit_cis){coefi$or_cis<-paste("[",format(coefi$'or 2.5%',nsmall=digs),"-",format(coefi$'or 97.5%',nsmall=digs),"]",sep="")}

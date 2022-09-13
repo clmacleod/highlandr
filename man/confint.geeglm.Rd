@@ -4,7 +4,7 @@
 \alias{confint.geeglm}
 \title{confint.geeglm function}
 \usage{
-\method{confint}{geeglm}(object, parm, level = 0.95, ...)
+\method{confint}{geeglm}(object, parm, model_package = "geepack", level = 0.95, ...)
 }
 \arguments{
 \item{object}{gee model for which to create confidence intervals}
@@ -16,7 +16,7 @@
 \item{...}{extra arguments}
 }
 \description{
-confidence intervals for generalized estimating equation models
+confidence intervals for generalized estimating equation models as found here https://stackoverflow.com/questions/21221280/confidence-interval-of-coefficients-using-generalized-estimating-equation-gee
 }
 \examples{
 confint.geeglm_function()

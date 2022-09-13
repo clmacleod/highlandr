@@ -127,7 +127,7 @@ ASED<-function(x=x,y=y,method="euclidean"){
 
 #' confint.geeglm function
 #'
-#' confidence intervals for generalized estimating equation models
+#' confidence intervals for generalized estimating equation models as found here https://stackoverflow.com/questions/21221280/confidence-interval-of-coefficients-using-generalized-estimating-equation-gee
 #' @param object gee model for which to create confidence intervals
 #' @param parm not sure but it came with the function
 #' @param level level of confidence needed. defaults to '.95'
@@ -136,13 +136,20 @@ ASED<-function(x=x,y=y,method="euclidean"){
 #' @export
 #' @examples
 #' confint.geeglm_function()
-
-confint.geeglm <- function(object, parm, level = 0.95, ...) {
+confint.geeglm <- function(object, parm, model_package="geepack", level = 0.95, ...) {
+ #https://stackoverflow.com/questions/21221280/confidence-interval-of-coefficients-using-generalized-estimating-equation-gee
   cc <- as.data.frame(coef(summary(object)))
   mult <- qnorm((1+level)/2)
+
+  if(model_package=="geepack"){
+  citab <-cbind(cc,
+                lwr=cc$Estimate-mult*cc$Std.err,
+                upr=cc$Estimate+mult*cc$Std.err)
+  } else{
   citab <-cbind(cc,
                 lwr=cc$Estimate-mult*cc$`Robust S.E.`,
                 upr=cc$Estimate+mult*cc$`Robust S.E.`)
+  }
   return(citab)
 }
 
