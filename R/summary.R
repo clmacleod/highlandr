@@ -801,6 +801,62 @@ unadjusted_ors<-function(vars,outcome,x,digs=3,staror=TRUE,starpval=TRUE){
 
 
 
+#' model_fit_compare function
+#'
+#' Creates a table of fit statistics for a list of models and will sort by the chosen fit statistic. lr tests are also calculated with between the model and the next model in line, this happens prior to sorting so be careful as the relevant 'next model in line' will not be what the lr test was comparing to before sorting.
+#' @param model_list list of models to calculate fit statistics for and compare
+#' @param models_names vector of model names that will be added into the table (makes it easier to konw which model is which)
+#' @param family statistical family used for the models (e.g. 'binomial', 'gaussian' etc). currently may only handle those two
+#' @param sort_by the variable that you would like the dataset sorted by. Default is 'none' which makes the lr tests relevant to the next model, if you sort by something note that the statistical tests between models will no longer be in order.
+#' @param formula_inc boolean indicating if the model formula should be included as a string variable in the table. Default is FALSE as formulae are long and this can end up being a cumbersome variable
+#' @keywords model_fit_compare regression model fit compare lm glm
+#' @export
+#' @examples
+#' model_fit_compare_function()
+#'
+model_fit_compare<-function(models_list,models_names=NULL,family='binomial',sortby="none",formula_inc=FALSE){
+
+  if(formula_inc && !is.null(models_names)){
+    oput<-data.frame("model"=NA,"model_name"=NA,"formula"=NA,"AIC"=NA,"BIC"=NA,"deviance"=NA,"R2"=NA,"loglik_w_next_mod"=NA,"LRpval_w_next_mod"=NA)
+  } else if(formula_inc){
+    oput<-data.frame("model"=NA,"formula"=NA,"AIC"=NA,"BIC"=NA,"deviance"=NA,"R2"=NA,"loglik_w_next_mod"=NA,"LRpval_w_next_mod"=NA)
+  } else if(!is.null(models_names)){
+    oput<-data.frame("model"=NA,"model_name"=NA,"AIC"=NA,"BIC"=NA,"deviance"=NA,"R2"=NA,"loglik_w_next_mod"=NA,"LRpval_w_next_mod"=NA)
+  } else {
+    oput<-data.frame("model"=NA,"AIC"=NA,"BIC"=NA,"deviance"=NA,"R2"=NA,"loglik_w_next_mod"=NA,"LRpval_w_next_mod"=NA)
+  }
+
+  for(i in 1:length(models_list)){
+    oput[i,"model"]<-paste("model_",i,sep="")
+    if(formula_inc){oput[i,"formula"]<-Reduce(paste, deparse(models_list[[i]]$formula))}
+    if(!is.null(models_names)){oput[i,"model_name"]<-models_names[i]}
+    oput[i,"AIC"]<-stats::AIC(models_list[[i]])
+    oput[i,"BIC"]<-stats::BIC(models_list[[i]])
+    oput[i,"deviance"]<-models_list[[i]]$deviance
+
+    if(family=="binomial"){
+      oput[i,"R2"]<-DescTools::PseudoR2(models_list[[i]])
+    } else if(family=="gaussian"){
+      oput[i,"R2"]<-summary(models_list[[i]])$r.squared
+    }
+
+    if(i!=length(models_list)){
+      oput[i,"loglik_w_next_mod"]<-paste(round(lmtest::lrtest(models_list[[i]],models_list[[i+1]])$LogLik,2),collapse=" ")
+      oput[i,"LRpval_w_next_mod"]<-highlandr::pval_star(lmtest::lrtest(models_list[[i]],models_list[[i+1]])$`Pr(>Chisq)`[2],digs=3)
+    }
+  }
+  if(sortby!="none"){
+    if(!sortby %in% names(oput)){
+      print("must sort by an output variable")
+    } else {
+      oput<-oput[order(oput[,sortby]),]
+    }
+  }
+
+  return(oput)
+}
+
+
 
 
 
