@@ -28,7 +28,6 @@ Imports:
           openssl,
           ids,
           gtools,
-          powerAnalysis,
           chisq.posthoc.test,
           effectsize
 RoxygenNote: 7.2.1
