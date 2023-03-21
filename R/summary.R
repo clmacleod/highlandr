@@ -1131,7 +1131,7 @@ sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,reporttest
         if((sum(prex2$observed)<1000&
             nrow(prex2$observed)==2&
             ncol(prex2$observed)==2&
-            (sum(prex2$expected<5)/(ncol(ttt$observed)*nrow(ttt$observed))<.2))
+            (sum(prex2$expected<5)/(ncol(prex2$observed)*nrow(prex2$observed))<.2))
            |force_fisher){
           sigtable[i,2]<-stats::fisher.test(data[,variables[i]],data[,crossvar])$p.value
           sigtable[i,3]<-"Fisher's Exact"
