@@ -29,5 +29,6 @@ Imports:
           ids,
           gtools,
           chisq.posthoc.test,
-          effectsize
+          effectsize,
+          tidyr
 RoxygenNote: 7.2.1
