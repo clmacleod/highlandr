@@ -1092,6 +1092,92 @@ fp_msd_class2_msdmulti<-function(x,vars,col1names=NULL,varnames=c("Variables","F
 
 
 
+
+#' fp_msd_class2_fp_msd_multi function
+#'
+#' This function is a wrapper for fp_msd_class2 when there are multiple variables to analyze using both fp and non-fp functions. This function will give a rough cut table 1. Given a data frame and a vector of variable names this function will apply fp_msd_class2 to each one and rbind the results into a dataframe. Additionally to adjust other parameters you can pass arguments to fp_msd_class2 as either single values (e.g. total) or as a vector the same length as the number of variables being analyzed (e.g. fp_msd_vector_tf)
+#' @param data data frame containing the data to be summarized
+#' @param indvars vector of variable names for the variables that are t be summarized. all variables must be present in the data frame
+#' @param classvar optional class variable to cross with the independent variables. this is is typically presented as a text (e.g. data$variable)vector of names to change the rows in column 1 to. This is typically what you want the individual variables that the rows represent called in the table. this must be the same length as vars. default is NULL which simply returns vars.
+#' @param fp_msd_vector_tf vector of boolean values indicating whether the variable should be 'fp' (true) or custom/msd (false). default is true
+#' @param funct1_vector a vector of the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"
+#' @param funct2_vector a vector of the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"
+#' @param var_name_vec a vector of variable names to use in the table. If left as null the table will contain the variable names as listed in the data frame
+#' @param sep_var_level boolean value indicating whether the variable name should be added to the table (TRUE) or not (FALSE). default is TRUE
+#' @param remove_var_dups boolean indicating whether duplicate values of the variable name should be removed (TRUE) or included (FALSE). default is TRUE
+#' @param shownval boolean indicating if the n value used after na removal should be displayed in non fp cases. this will only appear when fp=FASLE. default is TRUE
+#' @param total boolean indicating if a 'total' column should be added to the data frame. default is TRUE
+#' @param rnd_digs_vector the number of digits to round results to when fp=FALSE. default is 2
+#' @param rownvar name of the first column (second column if sep_var_level=TRUE) which contains either indvar categories or function names. default is 'Level'
+#' @param count_miss switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'
+#' @param count_miss_lab if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'
+#' @keywords fp_msd_class2_msdmulti variables fp_msd_class2 multiple multi class fp_msd summary table1 table2
+#' @export
+#' @examples
+#' fp_msd_class2_fp_msd_multi_function()
+#'
+fp_msd_class2_fp_msd_multi<-function(data,indvars,classvar=NULL,fp_msd_vector_tf=NULL,funct1_vector=NULL,funct2_vector=NULL,var_name_vec=NULL,sep_var_level=TRUE,remove_var_dups=TRUE,shownval=TRUE,total=TRUE,rnd_digs_vector=NULL,rownvar = "Level",count_miss = "ifmiss",count_miss_lab = "Missing"){
+  vnv_null<-is.null(var_name_vec)
+
+  if(is.null(rnd_digs_vector)){rnd_digs_vector<-rep(2,length(indvars))}
+  if(is.null(funct1_vector)){funct1_vector<-rep("mean",length(indvars))}
+  if(is.null(funct2_vector)){funct2_vector<-rep("sd",length(indvars))}
+  if(is.null(fp_msd_vector_tf)){fp_msd_vector_tf<-ifelse(unlist(lapply(data[,indvars],typeof))=="double",FALSE,TRUE)}
+
+  #print(fp_msd_vector_tf)
+
+  for(i in 1:length(indvars)){
+
+    tbl<-fp_msd_class2(data[,indvars[i]],
+                       classvar = data[,classvar],
+                       fp = fp_msd_vector_tf[i],
+                       funct1 = funct1_vector[i],
+                       funct2 = funct2_vector[i],
+                       shownval = shownval,
+                       total = total,
+                       rnd_digs = rnd_digs_vector[i],
+                       rownvar = rownvar,
+                       count_miss = count_miss,
+                       count_miss_lab = count_miss_lab
+    )
+
+    if(sep_var_level){
+      if(vnv_null){
+
+        var_name<-rep(indvars[i],nrow(tbl))
+
+      } else {
+
+        var_name<-rep(var_name_vec[i],nrow(tbl))
+
+      }
+
+      if(remove_var_dups&length(var_name)>1){
+        var_name[2:length(var_name)]<-NA
+      }
+
+      tbl<-cbind("Variable"=var_name,tbl)
+    }
+
+
+    #print(tbl)
+    if(i==1){
+      res<-tbl
+    } else {
+      res<-rbind(res,tbl)
+    }
+  }
+  return(res)
+}
+
+
+
+
+
+
+
+
+
 #' sig_val_auto function
 #'
 #' significance values creator with adjustment option testtypes and crossvar type can take the form (b,f,c) for binary, factor, or continuous
@@ -1131,7 +1217,7 @@ sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,reporttest
         if((sum(prex2$observed)<1000&
             nrow(prex2$observed)==2&
             ncol(prex2$observed)==2&
-            (sum(prex2$expected<5)/(ncol(prex2$observed)*nrow(prex2$observed))<.2))
+            (sum(prex2$expected<5)/(ncol(ttt$observed)*nrow(ttt$observed))<.2))
            |force_fisher){
           sigtable[i,2]<-stats::fisher.test(data[,variables[i]],data[,crossvar])$p.value
           sigtable[i,3]<-"Fisher's Exact"
