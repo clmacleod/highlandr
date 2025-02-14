@@ -1,6 +1,6 @@
 Package: highlandr
 Title: Random Useful Functions
-Version: 0.0.1.1
+Version: 0.0.2.1
 Authors@R: 
     person(given = "Colin",
            family = "Macleod",
@@ -19,8 +19,10 @@ Imports:
           rlist,
           stats,
           openxlsx,
+          readxl,
           lattice,
           tidyverse,
+          tidyr,
           data.table,
           stringr,
           tibble,
@@ -28,7 +30,33 @@ Imports:
           openssl,
           ids,
           gtools,
+          powerAnalysis,
           chisq.posthoc.test,
           effectsize,
-          tidyr
-RoxygenNote: 7.2.1
+          epikit,
+          ggcorrplot,
+          vip,
+          MLmetrics,
+          glmnet,
+          caret,
+          vip,
+          forestmodel,
+          devtools,
+          modelsummary,
+          psych,
+          broom,
+          haven,
+          gridExtra,
+          ROCR,
+          pROC,
+          survival,
+          cluster,
+          MASS,
+          corrplot,
+          forcats,
+          nnet,
+          RColorBrewer,
+          bestglm,
+          e1071
+Remotes: devtools::install_github("dustinfife/flexplot")         
+RoxygenNote: 7.2.3
