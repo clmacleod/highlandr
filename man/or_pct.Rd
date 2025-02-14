@@ -7,18 +7,14 @@
 or_pct(x, digs = 0, knit = FALSE)
 }
 \arguments{
-\item{vars}{vector of variables to evaluate}
+\item{x}{value to change}
 
-\item{data}{dataset containing the variables}
+\item{digs}{digits to round to}
 
-\item{allmissyes}{what to return if all of the variables are NA. Default is 1}
-
-\item{allmissno}{what to return if all of the variables are not NA. Defalt is 0}
-
-\item{sumisna_fun}{what function to pass to the sumisna function. default is 'is.na'}
+\item{knit}{a boolean indicating if the value and the label should be knit together (e.g. "10% increase" vs c("10%","increase")). Default is FALSE (i.e. c("10%","increase"))}
 }
 \description{
-given a vector of variable names and a dataset this function will find all of the variables in the vector that are present in the dataset and then of those determine (using sumisna) if all of them are NA.
+given an odds ratio this function will convert it into a %change
 }
 \examples{
 all_missing_dich_function()
