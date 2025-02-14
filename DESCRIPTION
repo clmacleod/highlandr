@@ -30,7 +30,7 @@ Imports:
           openssl,
           ids,
           gtools,
-          powerAnalysis (=0.2.1),
+          powerAnalysis (<=0.2.1),
           chisq.posthoc.test,
           effectsize,
           epikit,
