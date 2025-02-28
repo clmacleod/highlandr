@@ -23,6 +23,7 @@ distoon<-function(x,meth){
 #' @export
 #' @examples c(1,2,3,4,5) %rin% c(5,6,7,8,9,10,11,12) == TRUE TRUE FALSE FALSE TRUE | c(5,6,7,8,9,10,11,12) %rin% c(1,2,3,4,5) TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 #' %rinp%
+
 '%rina%'<-function(pattern,list){
   vapply(pattern, function (p) any(grepl(p,list)),logical(1L), USE.NAMES = FALSE)
 }
@@ -38,6 +39,7 @@ distoon<-function(x,meth){
 #' @export
 #' @examples c(1,2,3,4,5) %rin% c(5,6,7,8,9,10,11,12) == TRUE TRUE FALSE FALSE TRUE | c(5,6,7,8,9,10,11,12) %rin% c(1,2,3,4,5) TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 #' %rin%
+
 '%rine%'<-function(pattern,list){
   vapply(pattern, function (p) any(p == list),logical(1L), USE.NAMES = FALSE)
 }
@@ -54,7 +56,7 @@ distoon<-function(x,meth){
 #' @export
 #' @examples
 #' update_timer_simple()
-#'
+
 update_timer_simple <- function(start_time) {
   elapsed_time <- difftime(Sys.time(), start_time, units = "hours")
   cat(sprintf("\rElapsed Time: %.2f hours", as.numeric(elapsed_time)))
@@ -70,7 +72,7 @@ update_timer_simple <- function(start_time) {
 #' @export
 #' @examples
 #' format_time_difference()
-#'
+
 format_time_difference <- function(difftime_obj) {
   total_seconds <- as.numeric(difftime_obj, units = "secs")
   hours <- total_seconds %/% 3600
@@ -92,8 +94,7 @@ format_time_difference <- function(difftime_obj) {
 #' @export
 #' @examples
 #' update_timer()
-#'
-# Progress indicator update
+
 update_timer <- function(start_time,cur_time=Sys.time(),cur_iter,total_iter) {
 
   time_elapsed <- as.numeric((cur_time-start_time), units = "secs")
@@ -118,11 +119,4 @@ update_timer <- function(start_time,cur_time=Sys.time(),cur_iter,total_iter) {
 
   cat(sprintf("\rIteration - %i | Elapsed Time - Hours: %02d Minutes: %02d Seconds: %05.2f | Average Secs: %05.2f | Estimated Time Remaining - Hours: %02d Minutes: %02d Seconds: %05.2f", cur_iter, hours, minutes, seconds, avg_seconds_per_unit, hours_rem, minutes_rem, seconds_rem))
   flush.console() # Ensure the output gets flushed to the console
-
-  # cat(sprintf("\nElapsed Time - Hours: %02d Minutes: %02d Seconds: %05.2f", hours, minutes, seconds))
-  # flush.console() # Ensure the output gets flushed to the console
-  # cat(sprintf("\nAverage Secs: %05.2f", avg_seconds_per_unit))
-  # flush.console() # Ensure the output gets flushed to the console
-  # cat(sprintf("\nEstimated Time Remaining - Hours: %02d Minutes: %02d Seconds: %05.2f", hours_rem, minutes_rem, seconds_rem))
-  # flush.console() # Ensure the output gets flushed to the console
 }
