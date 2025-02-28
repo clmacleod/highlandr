@@ -36,7 +36,7 @@ freqtbl(
 \item{rnd}{number of decimals to round all calculations to}
 }
 \description{
-creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed. this funtion can also add standard binomial and multinomial confidence intervals if desired.
+creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed. this funtion can also add standard binomial and multinomial confidence intervals if desired.
 }
 \examples{
 freqtbl_function()

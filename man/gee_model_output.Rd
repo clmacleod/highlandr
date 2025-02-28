@@ -24,7 +24,7 @@ gee_model_output(
 \item{knit_cis}{boolean indicating if the confidence intervals should be knit into an extra variable in the format "[lwr-upr]"}
 }
 \description{
-creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95% confints (only tested on LR models though should work with most others)
+creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95pct confints (only tested on LR models though should work with most others)
 }
 \examples{
 gee_model_output()

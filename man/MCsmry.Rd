@@ -14,7 +14,7 @@ MCsmry(elementlist, variable, total = FALSE)
 \item{total}{boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE}
 }
 \description{
-multiple choice summary summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & % of all cases containing each element in the list
+multiple choice summary summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & pct of all cases containing each element in the list
 }
 \examples{
 MCsmry_function()

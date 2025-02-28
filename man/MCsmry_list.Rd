@@ -18,9 +18,9 @@ MCsmry_list(elementlist, variable, total = FALSE, delimiter = ", ")
 \item{delimiter}{the delimiter you to use to separate your data into a list format}
 }
 \description{
-this function gives a table with the count & % of all cases containing each element in the list
+this function gives a table with the count & pct of all cases containing each element in the list
 
-multiple choice summary list summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & % of all cases containing each element in the list. this function should be used over regular mcsmry when the delimiter is essential for distinguishing the list elements as is sometimes the case with multiple choice number values.
+multiple choice summary list summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & pct of all cases containing each element in the list. this function should be used over regular mcsmry when the delimiter is essential for distinguishing the list elements as is sometimes the case with multiple choice number values.
 }
 \examples{
 MCsmry_list_function()

@@ -18,8 +18,8 @@ An extension of '%in%' that cycles through every element of a list/vector and ev
 c(1,2,3,4,5) \%rin\% c(5,6,7,8,9,10,11,12) == TRUE TRUE FALSE FALSE TRUE | c(5,6,7,8,9,10,11,12) \%rin\% c(1,2,3,4,5) TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 \%rinp\%
 }
-\keyword{'%rina%'}
 \keyword{any}
 \keyword{in}
 \keyword{list}
 \keyword{match}
+\keyword{rina}

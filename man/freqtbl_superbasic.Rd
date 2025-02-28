@@ -16,7 +16,7 @@ freqtbl_superbasic(variable, name = "Category", total = FALSE, countna = TRUE)
 \item{countna}{boolean argument determining if na's should be omitted (FALSE) or added as a frequency category (TRUE). defaults to TRUE}
 }
 \description{
-creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
+creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
 }
 \examples{
 freqtbl_superbasic_function()

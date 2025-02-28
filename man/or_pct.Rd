@@ -11,17 +11,18 @@ or_pct(x, digs = 0, knit = FALSE)
 
 \item{digs}{digits to round to}
 
-\item{knit}{a boolean indicating if the value and the label should be knit together (e.g. "10% increase" vs c("10%","increase")). Default is FALSE (i.e. c("10%","increase"))}
+\item{knit}{a boolean indicating if the value and the label should be knit together (e.g. "10pct increase" vs c("10pct","increase")). Default is FALSE (i.e. c("10pct","increase"))}
 }
 \description{
-given an odds ratio this function will convert it into a %change
+given an odds ratio this function will convert it into a percent change
 }
 \examples{
-all_missing_dich_function()
+or_pct()
 
 }
 \keyword{odds}
 \keyword{or}
 \keyword{or_pct}
+\keyword{pct}
 \keyword{percent}
 \keyword{ratio}

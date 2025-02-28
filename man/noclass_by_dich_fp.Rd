@@ -48,7 +48,7 @@ noclass_by_dich_fp(
 \item{digs}{the number of digits to which the results will be rounded}
 }
 \description{
-given a suite of binary variables only this function creates a data frame of frequencies and percents formatted as n(%) with rows as variables
+given a suite of binary variables only this function creates a data frame of frequencies and percents formatted as n(pct) with rows as variables
 }
 \examples{
 class_by_dich_fp_function()

@@ -27,7 +27,7 @@ freqtbl_basic(
 \item{reverseorder}{boolean argument determining if the table should be sorted from lowest to highest frequency (FALSE). defaults to TRUE}
 }
 \description{
-creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
+creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
 }
 \examples{
 freqtbl_basic_function()
