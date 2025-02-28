@@ -57,6 +57,6 @@ Imports:
           RColorBrewer,
           bestglm,
           e1071
-Remotes: dustinfife/flexplot,
+Remotes: dustinfife/flexplot
 CRAN=https://cran.r-project.org/src/contrib/Archive/powerAnalysis/powerAnalysis_0.2.1.tar.gz
 RoxygenNote: 7.2.3
