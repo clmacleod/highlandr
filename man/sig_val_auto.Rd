@@ -41,7 +41,7 @@ sig_val_auto(
 
 \item{digs}{number of digits to round values to. default is 3}
 
-\item{force_fisher}{boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20% expected values below 5)}
+\item{force_fisher}{boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20pct expected values below 5)}
 
 \item{force_anova}{boolean indicating if anova should be used with a factor and continuous variable even normality (shapiro wilk) is violated}
 
@@ -51,7 +51,7 @@ sig_val_auto(
 significance values creator with adjustment option testtypes and crossvar type can take the form (b,f,c) for binary, factor, or continuous
 }
 \examples{
-sig_val_auto_function()
+sig_val_auto()
 
 }
 \keyword{crosstab}
