@@ -200,8 +200,9 @@ en_kfold_accuracy_tied<-function(tied_alphas,tied_cutoffs,ddata,response_var,ite
                                                        iter = iter,
                                                        k = k,
                                                        eq_wt = eq_wt,
-                                                       type_meas=type_meas,
-                                                       accuracy_modeling=TRUE)
+                                                       type_meas=type_meas#,
+                                                       #accuracy_modeling=TRUE
+                                                       )
     #print(j)
     #print(bestmods_accuracy_stats_results)
     if(j==1){

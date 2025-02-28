@@ -1,6 +1,6 @@
 #' freqtbl_basic function
 #'
-#' creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
+#' creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
 #' @param variable the variable from which a frequency table will be created
 #' @param name the name to appear in the table for the different categories. defaults to 'Category'
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -39,7 +39,7 @@ freqtbl_basic<-function(variable,name="Category",total=FALSE,countna=TRUE,orderb
 
 #' freqtbl_superbasic function
 #'
-#' creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
+#' creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed
 #' @param variable the variable from which a frequency table will be created
 #' @param name the name to appear in the table for the different categories. defaults to 'Category'
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -71,7 +71,7 @@ freqtbl_superbasic<-function(variable,name="Category",total=FALSE,countna=TRUE){
 
 #' freqtbl function
 #'
-#' creates frequency tables the way I like them. with freq, valid %, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed. this funtion can also add standard binomial and multinomial confidence intervals if desired.
+#' creates frequency tables the way I like them. with freq, valid pct, and in descending order of frequency. this function allows you to change the name of the category columns, and whether or not totals and NAs are displayed. this funtion can also add standard binomial and multinomial confidence intervals if desired.
 #' @param variable the variable from which a frequency table will be created
 #' @param name the name to appear in the table for the different categories. defaults to 'Category'
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -132,7 +132,7 @@ freqtbl<-function(variable,name="Category",total=FALSE,countna=TRUE,orderbycat=F
 
 #' MCsmry function
 #'
-#' multiple choice summary summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & % of all cases containing each element in the list
+#' multiple choice summary summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & pct of all cases containing each element in the list
 #' @param elementlist the list of multiple choice elements in the variable to look for and count
 #' @param variable the variable you wish to summarize
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -162,7 +162,7 @@ MCsmry<-function(elementlist,variable,total=FALSE){
 
 #' MCsmry list function
 #'
-#' this function gives a table with the count & % of all cases containing each element in the list
+#' this function gives a table with the count & pct of all cases containing each element in the list
 #' @param elementlist the list of multiple choice elements in the variable to look for and count
 #' @param variable the variable you wish to summarize
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -339,7 +339,7 @@ pairwise_table_comp<-function(x=x,v=v,diagonal=TRUE){
 
 #' MCsmry_list function
 #'
-#' multiple choice summary list summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & % of all cases containing each element in the list. this function should be used over regular mcsmry when the delimiter is essential for distinguishing the list elements as is sometimes the case with multiple choice number values.
+#' multiple choice summary list summarizes variables that have multiple choice options listed with a delimeter this function gives a table with the count & pct of all cases containing each element in the list. this function should be used over regular mcsmry when the delimiter is essential for distinguishing the list elements as is sometimes the case with multiple choice number values.
 #' @param elementlist the list of multiple choice elements in the variable to look for and count
 #' @param variable the variable you wish to summarize
 #' @param total boolean argument determining if a total should be added to the bottom of the table. defaults to FALSE
@@ -610,7 +610,7 @@ class_by_dich<-function(aggvars,byvar,funct=mean,catname="Class",fieldnames="non
 
 #' class_by_dich_fp function
 #'
-#' given a suite of binary variables and a class variable creates a data frame of frequencies and percents formatted as n(%) with rows as variables and columns as class variable elements using the function supplied
+#' given a suite of binary variables and a class variable creates a data frame of frequencies and percents formatted as n(pct) with rows as variables and columns as class variable elements using the function supplied
 #' @param aggvars a vector of variable names for those variables that you want aggregated. these must all be 0/1 binary variables
 #' @param byvar the class variable you want to use to split the data. the unique values of this variable will be the dataframe columns
 #' @param data_to_use the data frame than contains the aggvars and byvar
@@ -660,7 +660,7 @@ class_by_dich_fp<-function(aggvars,byvar,data_to_use,cntfunc=sum,pctfunc=mean,ca
 
 #' noclass_by_dich_fp function
 #'
-#' given a suite of binary variables only this function creates a data frame of frequencies and percents formatted as n(%) with rows as variables
+#' given a suite of binary variables only this function creates a data frame of frequencies and percents formatted as n(pct) with rows as variables
 #' @param aggvars a vector of variable names for those variables that you want aggregated. these must all be 0/1 binary variables
 #' @param data_to_use the data frame than contains the aggvars and byvar
 #' @param cntfunc the function to use for the calculation outside of the parentheses. default is sum
@@ -706,7 +706,7 @@ noclass_by_dich_fp<-function(aggvars,data_to_use,cntfunc=sum,pctfunc=mean,catnam
 
 #' lr_model_output function
 #'
-#' creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95% confints (only tested on LR models though should work with most others)
+#' creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95pct confints (only tested on LR models though should work with most others)
 #' @param model the output from a logistic regression model e.g. lrmodel<-lm(outcome~vars,data,family='binomial')
 #' @param staror boolean indicating whether to apply star characters to odds ratios. default is TRUE
 #' @param starpval boolean indicating whether to apply star characters to p values. default is TRUE
@@ -739,7 +739,7 @@ lr_model_output<-function(model,staror=TRUE,starpval=TRUE,digs=3,knit_cis=TRUE){
 
 #' gee_model_output function
 #'
-#' creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95% confints (only tested on LR models though should work with most others)
+#' creates a table of coefficients, std errors, z vals, pvals (with stars), ORs, and 95pct confints (only tested on LR models though should work with most others)
 #' @param model the output from a logistic regression model e.g. lrmodel<-lm(outcome~vars,data,family='binomial')
 #' @param staror boolean indicating whether to apply star characters to odds ratios. default is TRUE
 #' @param starpval boolean indicating whether to apply star characters to p values. default is TRUE
@@ -1191,13 +1191,13 @@ fp_msd_class2_fp_msd_multi<-function(data,indvars,classvar=NULL,fp_msd_vector_tf
 #' @param sig the significance value to use. default is .05
 #' @param stars boolean indicating whether to add stars to significance values. default is TRUE
 #' @param digs number of digits to round values to. default is 3
-#' @param force_fisher boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20% expected values below 5)
+#' @param force_fisher boolean indicating if fisher's exact test should be used with two binary variables even if other assumptions are violated (e.g. <20pct expected values below 5)
 #' @param force_anova boolean indicating if anova should be used with a factor and continuous variable even normality (shapiro wilk) is violated
 #' @param force_t boolean indicating if t test should be used with a binary and continuous variable even normality (shapiro wilk) is violated
 #' @keywords sig_val_auto significance pvalue p value crosstab
 #' @export
 #' @examples
-#' sig_val_auto_function()
+#' sig_val_auto()
 #'
 sig_val_auto<-function(variables,crossvar,data,crossvartype,testtypes,reporttest=TRUE,correction_type='none',sig=.05,stars=TRUE,digs=3,force_fisher=FALSE,force_anova=FALSE,force_t=FALSE){
   if(reporttest){

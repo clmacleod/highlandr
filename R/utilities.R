@@ -19,7 +19,7 @@ distoon<-function(x,meth){
 #' An extension of '%in%' that cycles through every element of a list/vector and evaluates if there is a partial or full match to a different list/vector
 #' @param pattern the list/vector of patterns to match
 #' @param list the list/vector that will be compared against for matches
-#' @keywords '%rina%' in any match list
+#' @keywords rina in any match list
 #' @export
 #' @examples c(1,2,3,4,5) %rin% c(5,6,7,8,9,10,11,12) == TRUE TRUE FALSE FALSE TRUE | c(5,6,7,8,9,10,11,12) %rin% c(1,2,3,4,5) TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 #' %rinp%
@@ -35,7 +35,7 @@ distoon<-function(x,meth){
 #' An extension of '%in%' that cycles through every element of a list/vector and evaluates if there is an exact match to a different list/vector
 #' @param pattern the list/vector of patterns to match
 #' @param list the list/vector that will be compared against for matches
-#' @keywords '%rine%' in any match list
+#' @keywords rine in any match list
 #' @export
 #' @examples c(1,2,3,4,5) %rin% c(5,6,7,8,9,10,11,12) == TRUE TRUE FALSE FALSE TRUE | c(5,6,7,8,9,10,11,12) %rin% c(1,2,3,4,5) TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 #' %rin%

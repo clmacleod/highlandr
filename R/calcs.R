@@ -351,14 +351,14 @@ all_missing_dich<-function(vars,data,allmissyes=1,allmissno=0,sumisna_fun="is.na
 
 #' or_pct function
 #'
-#' given an odds ratio this function will convert it into a %change
+#' given an odds ratio this function will convert it into a percent change
 #' @param x value to change
 #' @param digs digits to round to
-#' @param knit a boolean indicating if the value and the label should be knit together (e.g. "10% increase" vs c("10%","increase")). Default is FALSE (i.e. c("10%","increase"))
-#' @keywords or_pct or odds ratio percent
+#' @param knit a boolean indicating if the value and the label should be knit together (e.g. "10pct increase" vs c("10pct","increase")). Default is FALSE (i.e. c("10pct","increase"))
+#' @keywords or_pct or odds ratio percent pct
 #' @export
 #' @examples
-#' all_missing_dich_function()
+#' or_pct()
 #'
 or_pct<-function(x,digs=0,knit=FALSE){
 
