@@ -14,7 +14,6 @@ A simple update timer for elapsed time in a for loop
 }
 \examples{
 update_timer_simple()
-
 }
 \keyword{progress}
 \keyword{time}

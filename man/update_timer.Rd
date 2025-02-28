@@ -20,7 +20,6 @@ A more advanced update timer for elapsed time in a for loop
 }
 \examples{
 update_timer()
-
 }
 \keyword{progress}
 \keyword{time}
