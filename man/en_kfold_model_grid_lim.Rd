@@ -2,7 +2,7 @@
 % Please edit documentation in R/enr functions.R
 \name{en_kfold_model_grid_lim}
 \alias{en_kfold_model_grid_lim}
-\title{fp_msd_class2_fp_msd_multi function}
+\title{en_kfold_model_grid_lim function}
 \usage{
 en_kfold_model_grid_lim(
   ddata,
@@ -30,50 +30,49 @@ en_kfold_model_grid_lim(
 )
 }
 \arguments{
-\item{data}{data frame containing the data to be summarized}
+\item{ddata}{data frame containing the data to be modeled}
 
-\item{indvars}{vector of variable names for the variables that are t be summarized. all variables must be present in the data frame}
+\item{response_var}{string identifying the name of the outcome variable}
 
-\item{classvar}{optional class variable to cross with the independent variables. this is is typically presented as a text (e.g. data$variable)vector of names to change the rows in column 1 to. This is typically what you want the individual variables that the rows represent called in the table. this must be the same length as vars. default is NULL which simply returns vars.}
+\item{iter}{the number of iterations to use}
 
-\item{fp_msd_vector_tf}{vector of boolean values indicating whether the variable should be 'fp' (true) or custom/msd (false). default is true}
+\item{k}{the number of folds to use}
 
-\item{funct1_vector}{a vector of the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{seed}{the seed value for allowing results to be reproduced}
 
-\item{funct2_vector}{a vector of the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{fit_met}{string indicating the fit metric to be used to evaluate model performance. options are c(accuracy, auroc, logloss, f1, ppv, npv, sens, spec, bal_acc)}
 
-\item{var_name_vec}{a vector of variable names to use in the table. If left as null the table will contain the variable names as listed in the data frame}
+\item{loo}{boolean indicating whether 'leave one out' cross validation should be used}
 
-\item{sep_var_level}{boolean value indicating whether the variable name should be added to the table (TRUE) or not (FALSE). default is TRUE}
+\item{up_dn_samp}{string indicating whether unbalanced classes should be balanced by having the smaller class upsampled to be the same size as the larger class or vice versa. can take the form 'upsamp', 'downsamp', and 'none' (default)}
 
-\item{remove_var_dups}{boolean indicating whether duplicate values of the variable name should be removed (TRUE) or included (FALSE). default is TRUE}
+\item{eq_wt}{boolean indicating whether the 0/1 classes should be balanced with weights. you may want to use this if there is a bad class imbalance}
 
-\item{shownval}{boolean indicating if the n value used after na removal should be displayed in non fp cases. this will only appear when fp=FASLE. default is TRUE}
+\item{type_meas}{the 'type measure' which is passed to cv.glmnet that governs its training penalty when tuning lambda. this should match arguments expected in cv.glmnet}
 
-\item{total}{boolean indicating if a 'total' column should be added to the data frame. default is TRUE}
+\item{na_rm}{boolean indicating whether missing values should be removed. default is TRUE}
 
-\item{rnd_digs_vector}{the number of digits to round results to when fp=FALSE. default is 2}
+\item{lr_cutoff}{vetor of cutoff values to test/tune for optimization. the default is 'c(.5)' which is to say 'equal distance from all classes' which is typical in standard analyses}
 
-\item{rownvar}{name of the first column (second column if sep_var_level=TRUE) which contains either indvar categories or function names. default is 'Level'}
+\item{accuracy_modeling}{switch determining if we need to break ties between optimal solutions}
 
-\item{count_miss}{switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'}
+\item{ties_measure}{string indicating the method for breaking ties. default is 'mode' indicating that the model with the best performance across all fit metrics listed will when when model results are tied.}
 
-\item{count_miss_lab}{if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'}
+\item{save_results}{boolean indicating if the unaggregated results should be saved and returned. default is FALSE as this is typically too much material to save and could crash the r session}
+
+\item{writeout}{boolean indicating if the progress of the function should be written out in real time in order to restart if need be. the file wll contain the aggregated results up to some iteration so that the process may be restarted without having to return to i = 1}
+
+\item{writeout_num}{the number of iterations before the results are written out to save. a higher number will move faster (beacuse it's not writing out all the time) and a lower number will move slower but will probably mean a lower number of reruns in the even of an interruption. default is alpha*5 so in the event of checking 20 alphas the function will write results every 100 iterations}
+
+\item{writeout_path}{string of the path directory for writing out results}
+
+\item{restarting}{boolean indicating whether the process is restarting. if it is then the function looks for a file in the 'writeout_path' and reads that in and continues from where it left off}
 }
 \description{
 Runs k fold cross validation ENR models with simultaneous estimation of alpha, lambda, and cutoff via randomized grid (DOCUMENTATION COMING- CURRENT DOCUMENTATION INCORRECT)
 }
 \examples{
-fp_msd_class2_fp_msd_multi_function()
-
+en_kfold_model_grid_lim()
 }
-\keyword{class}
-\keyword{fp_msd}
-\keyword{fp_msd_class2}
-\keyword{fp_msd_class2_msdmulti}
-\keyword{multi}
-\keyword{multiple}
-\keyword{summary}
-\keyword{table1}
-\keyword{table2}
-\keyword{variables}
+\keyword{en_kfold_model_grid_lim}
+\keyword{enr}

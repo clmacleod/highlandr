@@ -19,42 +19,33 @@ en_kfold_accuracy(
 )
 }
 \arguments{
-\item{ddata}{data frame containing the data to be summarized}
+\item{ddata}{data frame containing the data to be modeled}
 
-\item{response_var}{vector of variable names for the variables that are t be summarized. all variables must be present in the data frame}
+\item{response_var}{string identifying the name of the outcome variable}
 
-\item{mod_alpha}{optional class variable to cross with the independent variables. this is is typically presented as a text (e.g. data$variable)vector of names to change the rows in column 1 to. This is typically what you want the individual variables that the rows represent called in the table. this must be the same length as vars. default is NULL which simply returns vars.}
+\item{mod_alpha}{the alpha(s) value(s) to be checked. alpha is the ENR blending parameter that governs how much ridge regression (0) and lasso regression (1) will be used.}
 
-\item{mod_lambda}{vector of boolean values indicating whether the variable should be 'fp' (true) or custom/msd (false). default is true}
+\item{mod_lambda}{the lambda(s) to be checked. lambda is the ENR penalty parameter for the ridge portion of the ENR}
 
-\item{iter}{a vector of the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{iter}{the number of iterations to use}
 
-\item{k}{a vector of the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{k}{the number of folds to use}
 
-\item{seed}{a vector of variable names to use in the table. If left as null the table will contain the variable names as listed in the data frame}
+\item{seed}{the seed value for allowing results to be reproduced}
 
-\item{loo}{boolean value indicating whether the variable name should be added to the table (TRUE) or not (FALSE). default is TRUE}
+\item{loo}{boolean indicating whether 'leave one out' cross validation should be used}
 
-\item{eq_wt}{boolean indicating whether duplicate values of the variable name should be removed (TRUE) or included (FALSE). default is TRUE}
+\item{eq_wt}{boolean indicating whether the 0/1 classes should be balanced with weights. you may want to use this if there is a bad class imbalance}
 
-\item{type_meas}{boolean indicating if the n value used after na removal should be displayed in non fp cases. this will only appear when fp=FASLE. default is TRUE}
+\item{type_meas}{the 'type measure' which is passed to cv.glmnet that governs its training penalty when tuning lambda. this should match arguments expected in cv.glmnet}
 
-\item{lr_cutoff}{boolean indicating if a 'total' column should be added to the data frame. default is TRUE}
+\item{lr_cutoff}{vetor of cutoff values to test/tune for optimization. the default is 'c(.5)' which is to say 'equal distance from all classes' which is typical in standard analyses}
 }
 \description{
 This function calculates the cross validated accuracy of an enr model
 }
 \examples{
 en_kfold_accuracy()
-
 }
-\keyword{class}
-\keyword{fp_msd}
-\keyword{fp_msd_class2}
-\keyword{fp_msd_class2_msdmulti}
-\keyword{multi}
-\keyword{multiple}
-\keyword{summary}
-\keyword{table1}
-\keyword{table2}
-\keyword{variables}
+\keyword{en_kfold_accuracy}
+\keyword{enr}

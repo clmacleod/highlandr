@@ -2,7 +2,7 @@
 % Please edit documentation in R/enr functions.R
 \name{en_kfold_model}
 \alias{en_kfold_model}
-\title{fp_msd_class2_fp_msd_multi function}
+\title{en_kfold_model function}
 \usage{
 en_kfold_model(
   ddata,
@@ -22,50 +22,39 @@ en_kfold_model(
 )
 }
 \arguments{
-\item{data}{data frame containing the data to be summarized}
+\item{ddata}{data frame containing the data to be modeled}
 
-\item{indvars}{vector of variable names for the variables that are t be summarized. all variables must be present in the data frame}
+\item{response_var}{string identifying the name of the outcome variable}
 
-\item{classvar}{optional class variable to cross with the independent variables. this is is typically presented as a text (e.g. data$variable)vector of names to change the rows in column 1 to. This is typically what you want the individual variables that the rows represent called in the table. this must be the same length as vars. default is NULL which simply returns vars.}
+\item{iter}{the number of iterations to use}
 
-\item{fp_msd_vector_tf}{vector of boolean values indicating whether the variable should be 'fp' (true) or custom/msd (false). default is true}
+\item{k}{the number of folds to use}
 
-\item{funct1_vector}{a vector of the first function to use (i.e. outside the parentheses) if fp='FALSE'. default is 'mean'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{num_alpha}{an integer of the number of alphas to consider. this will be split across 0 to 1. for example if '5' is given then alphas will go from 0 to 1 and will be num_alpha/iteration (i.e. 0, .2, .4, .6, .8, 1)}
 
-\item{funct2_vector}{a vector of the second function to use (i.e. inside the parentheses) if fp='FALSE'. default is 'sd'. if supplying different functions be sure to quote e.g. "IQR"}
+\item{seed}{the seed value for allowing results to be reproduced}
 
-\item{var_name_vec}{a vector of variable names to use in the table. If left as null the table will contain the variable names as listed in the data frame}
+\item{fit_met}{string indicating the fit metric to be used to evaluate model performance. options are c(accuracy, auroc, logloss, f1, ppv, npv, sens, spec, bal_acc)}
 
-\item{sep_var_level}{boolean value indicating whether the variable name should be added to the table (TRUE) or not (FALSE). default is TRUE}
+\item{loo}{boolean indicating whether 'leave one out' cross validation should be used}
 
-\item{remove_var_dups}{boolean indicating whether duplicate values of the variable name should be removed (TRUE) or included (FALSE). default is TRUE}
+\item{up_dn_samp}{string indicating whether unbalanced classes should be balanced by having the smaller class upsampled to be the same size as the larger class or vice versa. can take the form 'upsamp', 'downsamp', and 'none' (default)}
 
-\item{shownval}{boolean indicating if the n value used after na removal should be displayed in non fp cases. this will only appear when fp=FASLE. default is TRUE}
+\item{eq_wt}{boolean indicating whether the 0/1 classes should be balanced with weights. you may want to use this if there is a bad class imbalance}
 
-\item{total}{boolean indicating if a 'total' column should be added to the data frame. default is TRUE}
+\item{type_meas}{the 'type measure' which is passed to cv.glmnet that governs its training penalty when tuning lambda. this should match arguments expected in cv.glmnet}
 
-\item{rnd_digs_vector}{the number of digits to round results to when fp=FALSE. default is 2}
+\item{na_rm}{boolean indicating whether missing values should be removed. default is TRUE}
 
-\item{rownvar}{name of the first column (second column if sep_var_level=TRUE) which contains either indvar categories or function names. default is 'Level'}
+\item{lr_cutoff}{vetor of cutoff values to test/tune for optimization. the default is 'c(.5)' which is to say 'equal distance from all classes' which is typical in standard analyses}
 
-\item{count_miss}{switch determining if NA values should be added to the indvar frequencies as it's own category. if this is 'ifmiss' then missing will be added. if this is 'none' then missing will be excluded and a message will show number of records removed. default is 'ifmiss'}
-
-\item{count_miss_lab}{if count_miss='ifmiss' meaning we want NA values included this argument determines what they are labeled as. default is 'Missing'}
+\item{accuracy_modeling}{switch determining if we need to break ties between optimal solutions}
 }
 \description{
 run kfold cross validated enr models (DOCUMENTATION COMING- CURRENT DOCUMENTATION INCORRECT)
 }
 \examples{
-fp_msd_class2_fp_msd_multi_function()
-
+en_kfold_model()
 }
-\keyword{class}
-\keyword{fp_msd}
-\keyword{fp_msd_class2}
-\keyword{fp_msd_class2_msdmulti}
-\keyword{multi}
-\keyword{multiple}
-\keyword{summary}
-\keyword{table1}
-\keyword{table2}
-\keyword{variables}
+\keyword{en_kfold_model}
+\keyword{enr}

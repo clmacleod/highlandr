@@ -14,7 +14,6 @@ A function for formatting a time difference object into 'hours - minutes - secon
 }
 \examples{
 format_time_difference()
-
 }
 \keyword{format}
 \keyword{progress}

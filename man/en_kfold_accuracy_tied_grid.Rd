@@ -19,13 +19,34 @@ en_kfold_accuracy_tied_grid(
   selection_type = "modal"
 )
 }
+\arguments{
+\item{tied_alphas}{a vector of the alphas that are tied}
+
+\item{tied_cutoffs}{a vector of the cutoffs that are tied}
+
+\item{ddata}{data frame containing the data to be modeled}
+
+\item{response_var}{string identifying the name of the outcome variable}
+
+\item{iter}{the number of iterations to use}
+
+\item{k}{the number of folds to use}
+
+\item{favor_parsimony}{boolean indicating if a simpler model should be favored}
+
+\item{eq_wt}{boolean indicating whether the 0/1 classes should be balanced with weights. you may want to use this if there is a bad class imbalance}
+
+\item{seed}{the seed value for allowing results to be reproduced}
+
+\item{type_meas}{the 'type measure' which is passed to cv.glmnet that governs its training penalty when tuning lambda. this should match arguments expected in cv.glmnet}
+}
 \description{
 This function breaks ties if model performance for grid search enr models is tied (DOCUMENTATION COMING)
 }
 \examples{
 en_kfold_accuracy_tied_grid()
-
 }
+\keyword{en_kfold_accuracy_tied_grid}
 \keyword{enr}
 \keyword{grid}
 \keyword{tied}
