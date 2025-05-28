@@ -1118,7 +1118,8 @@ fp_msd_class2_msdmulti<-function(x,vars,col1names=NULL,varnames=c("Variables","F
 #'
 fp_msd_class2_fp_msd_multi<-function(data,indvars,classvar=NULL,fp_msd_vector_tf=NULL,funct1_vector=NULL,funct2_vector=NULL,var_name_vec=NULL,sep_var_level=TRUE,remove_var_dups=TRUE,shownval=TRUE,total=TRUE,rnd_digs_vector=NULL,rownvar = "Level",count_miss = "ifmiss",count_miss_lab = "Missing"){
   vnv_null<-is.null(var_name_vec)
-
+  
+  if(!is.null(classvar)){classvar<-data[,classvar]}
   if(is.null(rnd_digs_vector)){rnd_digs_vector<-rep(2,length(indvars))}
   if(is.null(funct1_vector)){funct1_vector<-rep("mean",length(indvars))}
   if(is.null(funct2_vector)){funct2_vector<-rep("sd",length(indvars))}
