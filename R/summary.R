@@ -1130,7 +1130,8 @@ fp_msd_class2_fp_msd_multi<-function(data,indvars,classvar=NULL,fp_msd_vector_tf
   for(i in 1:length(indvars)){
 
     tbl<-fp_msd_class2(data[,indvars[i]],
-                       classvar = data[,classvar],
+                       #classvar = data[,classvar],
+                       classvar = classvar,
                        fp = fp_msd_vector_tf[i],
                        funct1 = funct1_vector[i],
                        funct2 = funct2_vector[i],
