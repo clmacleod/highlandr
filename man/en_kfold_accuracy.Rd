@@ -9,6 +9,7 @@ en_kfold_accuracy(
   response_var,
   mod_alpha,
   mod_lambda = NULL,
+  mod_type = "glmnet",
   iter = 100,
   k = 10,
   seed = 123,
@@ -26,6 +27,8 @@ en_kfold_accuracy(
 \item{mod_alpha}{the alpha(s) value(s) to be checked. alpha is the ENR blending parameter that governs how much ridge regression (0) and lasso regression (1) will be used.}
 
 \item{mod_lambda}{the lambda(s) to be checked. lambda is the ENR penalty parameter for the ridge portion of the ENR}
+
+\item{mod_type}{the model type to use, default is 'glmnet', also accepts 'glm'}
 
 \item{iter}{the number of iterations to use}
 
