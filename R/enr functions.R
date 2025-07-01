@@ -8,6 +8,7 @@
 #' @param response_var string identifying the name of the outcome variable
 #' @param mod_alpha the alpha(s) value(s) to be checked. alpha is the ENR blending parameter that governs how much ridge regression (0) and lasso regression (1) will be used.
 #' @param mod_lambda the lambda(s) to be checked. lambda is the ENR penalty parameter for the ridge portion of the ENR
+#' @param mod_type the model type to use, default is 'glmnet', also accepts 'glm'
 #' @param iter the number of iterations to use
 #' @param k the number of folds to use
 #' @param seed the seed value for allowing results to be reproduced
@@ -20,7 +21,7 @@
 #' @examples
 #' en_kfold_accuracy()
 
-en_kfold_accuracy<-function(ddata,response_var,mod_alpha,mod_lambda=NULL,iter=100,k=10,seed=123,loo=FALSE,eq_wt=FALSE,type_meas = "deviance",lr_cutoff=c(.5)){
+en_kfold_accuracy<-function(ddata,response_var,mod_alpha,mod_lambda=NULL,mod_type='glmnet',iter=100,k=10,seed=123,loo=FALSE,eq_wt=FALSE,type_meas = "deviance",lr_cutoff=c(.5)){
 
   print("cutoff")
   print(lr_cutoff)
@@ -77,56 +78,47 @@ en_kfold_accuracy<-function(ddata,response_var,mod_alpha,mod_lambda=NULL,iter=10
       test_resp <- test[,response_var]
 
       # Fitting
-      if(is.null(mod_lambda)){
-        model <- cv.glmnet(x = train_pred,
-                           y = train_resp,
-                           weights = wt,
-                           type.measure=type_meas,
-                           alpha=mod_alpha,
-                           family="binomial")
-      } else {
-        model <- glmnet(x = train_pred,
-                        y = train_resp,
-                        weights = wt,
-                        type.measure=type_meas,
-                        alpha=mod_alpha,
-                        lambda = mod_alpha,
-                        family="binomial")
-      }
+      if(mod_type=='glmnet'){
 
-
-
-
-      # print("alpha")
-      # print(mod_alpha)
-      # print("cutoff")
-      # print(lr_cutoff)
-      # print("test response")
-      # print(length(test_resp))
-      # print("test predict")
-      # print(nrow(test_pred))
-
-      # Predict results
-      # results_pred <- predict(model,newx=test_pred,type="class",s=model$lambda.1se)
+        if(is.null(mod_lambda)){
+            model <- cv.glmnet(x = train_pred,
+                               y = train_resp,
+                               weights = wt,
+                               type.measure=type_meas,
+                               alpha=mod_alpha,
+                               family="binomial")
+          } else {
+            model <- glmnet(x = train_pred,
+                            y = train_resp,
+                            weights = wt,
+                            type.measure=type_meas,
+                            alpha=mod_alpha,
+                            lambda = mod_alpha,
+                            family="binomial")
+          }
 
       results_pred_prob <- predict(model,newx=test_pred,type="response",s=model$lambda.1se)
 
-      #print(results_pred_prob)
-      #print(nrow(results_pred_prob))
-
-      #print(results_pred_prob)
-      #print(results_pred_prob>lr_cutoff)
-
       results_pred <- ifelse((cton(predict(model,newx=test_pred,type="response",s=model$lambda.1se))>lr_cutoff),1,0)
 
-      #print(results_pred)
-      #print(nrow(results_pred))
+      } else if(mod_type=='glm'){
+            model <- glm.fit(x = train_pred,
+                             y = train_resp,
+                             weights = wt,
+                             family="binomial")
+           results_pred_prob <- predict(model,newx=test_pred,type="response")
+
+           results_pred <- ifelse((cton(predict(model,newx=test_pred,type="response"))>lr_cutoff),1,0)
+
+
+      } else {
+          print("select a model type this function can handle (i.e., 'glmnet' or 'glm")
+        }
+
 
       results_pred<-factor(results_pred,levels = c("1","0"))
       test_resp<-factor(test_resp,levels = c("1","0"))
 
-
-      #print(cbind(results_pred,test_resp,(results_pred_prob>lr_cutoff),lr_cutoff))
 
       # Confusion matrix
       cm <- caret::confusionMatrix(data = results_pred,
@@ -157,6 +149,10 @@ en_kfold_accuracy<-function(ddata,response_var,mod_alpha,mod_lambda=NULL,iter=10
   return(kfold_results)
 
 }
+
+
+
+
 
 
 
